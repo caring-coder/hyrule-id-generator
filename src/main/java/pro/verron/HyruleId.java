@@ -6,10 +6,10 @@ import java.util.Iterator;
 public class HyruleId {
 
     public static Iterator<HyruleId> producer() {
-        return Collections.emptyIterator();
+        return Collections.singleton(new HyruleId()).iterator();
     }
 
     public String representation() {
-        return "";
+        return "000000000";
     }
 }

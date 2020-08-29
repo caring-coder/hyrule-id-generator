@@ -16,8 +16,9 @@ class Hyrule_Id_Tests {
     }
 
     @Test
-    void should_be_able_to_create_an_hyrule_id_producer(){
-        assertNotNull(HyruleId.producer(), "Failed to create an HyruleId producer");
+    void should_be_9_characters_long_only_be_composed_of_digits(){
+        HyruleId id = HyruleId.producer().next();
+        assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
 }
