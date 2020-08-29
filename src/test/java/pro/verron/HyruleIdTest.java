@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -21,4 +23,11 @@ class Hyrule_Id_Tests {
         assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
+    @Test
+    void should_be_sequentially_different(){
+        Iterator<HyruleId> producer = HyruleId.producer();
+        HyruleId first = producer.next();
+        HyruleId second = producer.next();
+        assertThat(first, is(not(equalTo(second))));
+    }
 }
