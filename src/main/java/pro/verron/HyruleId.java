@@ -34,6 +34,6 @@ public class HyruleId {
     }
 
     public String representation() {
-        return "000000000";
+        return String.format("%9d", seed).replace(' ', '0');
     }
 }

@@ -24,6 +24,12 @@ class Hyrule_Id_Tests {
     }
 
     @Test
+    void should_be_comprised_of_its_seed_value_left_padded_by_zero(){
+        HyruleId id = HyruleId.of(13579);
+        assertThat(id.representation(), is(equalTo("000013579")));
+    }
+
+    @Test
     void should_be_sequentially_different(){
         Iterator<HyruleId> producer = HyruleId.producer();
         HyruleId first = producer.next();
@@ -44,4 +50,6 @@ class Hyrule_Id_Tests {
         HyruleId second = HyruleId.of(987654321);
         assertThat(first, is(not(equalTo(second))));
     }
+
+
 }
