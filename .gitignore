@@ -1,3 +1,6 @@
 # ignore intellij specific files
 *.iml
 .idea/
+
+# ignore maven default target compilation folder
+target/
