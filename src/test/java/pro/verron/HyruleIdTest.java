@@ -30,4 +30,18 @@ class Hyrule_Id_Tests {
         HyruleId second = producer.next();
         assertThat(first, is(not(equalTo(second))));
     }
+
+    @Test
+    void should_be_equals_if_their_seed_is_the_same(){
+        HyruleId first = HyruleId.of(123456789);
+        HyruleId second = HyruleId.of(123456789);
+        assertThat(first, is(equalTo(second)));
+    }
+
+    @Test
+    void should_be_different_if_their_seed_is_different(){
+        HyruleId first = HyruleId.of(123456789);
+        HyruleId second = HyruleId.of(987654321);
+        assertThat(first, is(not(equalTo(second))));
+    }
 }
