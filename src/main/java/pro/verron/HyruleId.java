@@ -9,4 +9,7 @@ public class HyruleId {
         return Collections.emptyIterator();
     }
 
+    public String representation() {
+        return "";
+    }
 }
