@@ -1,5 +1,9 @@
 package pro.verron;
 
+import lombok.SneakyThrows;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -8,6 +12,7 @@ import java.util.stream.StreamSupport;
 
 public class Hyrule {
 
+    @SneakyThrows
     public static Stream<HyruleId> idStream() {
         Iterator<HyruleId> iterator = new HyruleIdGenerator();
         int characteristics = Spliterator.ORDERED
