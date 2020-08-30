@@ -66,5 +66,21 @@ class Hyrule_Id_Tests {
         assertThat("Not found that much id", id.isPresent());
     }
 
+    @Test
+    void should_not_be_ordered_ascending(){
+        Stream<HyruleId> stream = Hyrule.idStream();
+        List<HyruleId> ids = stream.limit(10_000).collect(toList());
+        List<HyruleId> sortedIds = ids.stream().sorted().collect(toList());
+        assertThat(sortedIds, is(not(equalTo(ids))));
+    }
+
+    @Test
+    void should_not_be_ordered_descending(){
+        Stream<HyruleId> stream = Hyrule.idStream();
+        List<HyruleId> ids = stream.limit(10_000).collect(toList());
+        List<HyruleId> sortedIds = ids.stream().sorted(Comparator.reverseOrder()).collect(toList());
+        assertThat(sortedIds, is(not(equalTo(ids))));
+    }
+
 
 }

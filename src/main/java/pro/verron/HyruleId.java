@@ -2,7 +2,7 @@ package pro.verron;
 
 import java.util.*;
 
-public class HyruleId {
+public class HyruleId implements Comparable<HyruleId>{
 
     @Override
     public boolean equals(Object o) {
@@ -31,4 +31,13 @@ public class HyruleId {
         return String.format("%9d", seed).replace(' ', '0');
     }
 
+    @Override
+    public int compareTo(HyruleId o) {
+        return o != null ? this.seed - o.seed : -1;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Id{seed=%d}", seed);
+    }
 }

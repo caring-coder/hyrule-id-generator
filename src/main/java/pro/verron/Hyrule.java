@@ -14,7 +14,8 @@ public class Hyrule {
 
     @SneakyThrows
     public static Stream<HyruleId> idStream() {
-        Iterator<HyruleId> iterator = new HyruleIdGenerator();
+        SecureRandom random = SecureRandom.getInstanceStrong();
+        Iterator<HyruleId> iterator = new HyruleIdGenerator(random);
         int characteristics = Spliterator.ORDERED
                 + Spliterator.DISTINCT
                 + Spliterator.NONNULL
