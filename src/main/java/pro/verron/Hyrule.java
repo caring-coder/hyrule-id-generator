@@ -16,16 +16,14 @@ import java.util.stream.StreamSupport;
 public class Hyrule {
 
     @SneakyThrows
-    public static Stream<HyruleId> idStream(String initialSeed) {
+    public static Stream<HyruleId> idStream(int nbChar, String initialSeed) {
         SecureRandom random = getSecureRandom(initialSeed);
-        Iterator<HyruleId> iterator = new HyruleIdGenerator(random);
+        Iterator<HyruleId> iterator = new HyruleIdGenerator(nbChar, random);
         int characteristics = Spliterator.ORDERED
-                + Spliterator.DISTINCT
-                + Spliterator.NONNULL
                 + Spliterator.NONNULL
                 + Spliterator.IMMUTABLE;
         Spliterator<HyruleId> spliterator = Spliterators.spliteratorUnknownSize(iterator, characteristics);
-        return StreamSupport.stream(spliterator, false);
+        return StreamSupport.stream(spliterator, false).distinct();
     }
 
     /**

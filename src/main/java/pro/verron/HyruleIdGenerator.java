@@ -4,15 +4,24 @@ import java.util.Iterator;
 import java.util.Random;
 
 class HyruleIdGenerator implements Iterator<HyruleId> {
-    /**
-     * By definition an Hyrule id will be between 000_000_000 and 999_999_999
-     */
-    private static final int HYRULE_ID_SEED_UPPER_BOUND = 1_000_000_000;
 
+    private final int nbChar;
+    private final int upperBound;
     private final Random random;
 
-    HyruleIdGenerator(Random random) {
+    HyruleIdGenerator(int nbChar, Random random) {
+        assert nbChar > 0 : "Only positive upper bound is being considered";
+        this.upperBound = computeHighestPossibleValue(nbChar);
+        this.nbChar = nbChar;
         this.random = random;
+    }
+
+    private int computeHighestPossibleValue(int nbChar) {
+        int top = 0;
+        for(int i = 0; i < nbChar; i++){
+            top = top * 10 + 9;
+        }
+        return top;
     }
 
     @Override
@@ -22,6 +31,6 @@ class HyruleIdGenerator implements Iterator<HyruleId> {
 
     @Override
     public HyruleId next() {
-        return new HyruleId(random.nextInt(HYRULE_ID_SEED_UPPER_BOUND));
+        return new HyruleId(nbChar, random.nextInt(upperBound));
     }
 }

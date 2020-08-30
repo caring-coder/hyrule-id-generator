@@ -4,6 +4,8 @@ import java.util.*;
 
 public class HyruleId implements Comparable<HyruleId>{
 
+    private final String format;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -19,16 +21,19 @@ public class HyruleId implements Comparable<HyruleId>{
 
     private final int seed;
 
-    public HyruleId(int seed) {
+    public HyruleId(int nbChar, int seed) {
+        assert nbChar >= (int)(Math.log10(seed) + 1) : "The seed should be writable with the nb of character expected";
         this.seed = seed;
+        char paddingCharacter = '0';
+        this.format = "%" + paddingCharacter + nbChar + "d";
     }
 
-    public static HyruleId of(int seed) {
-        return new HyruleId(seed);
+    public static HyruleId of(int nbChar, int seed) {
+        return new HyruleId(nbChar, seed);
     }
 
     public String representation() {
-        return String.format("%9d", seed).replace(' ', '0');
+        return String.format(format, seed);
     }
 
     @Override

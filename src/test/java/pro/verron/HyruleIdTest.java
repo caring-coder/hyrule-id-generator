@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 class Hyrule_Id_Tests {
 
     public static final String SEED = "HyruleDefaultIdStreamSeed";
+    public static final int NB_CHAR = 9;
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", Hyrule.idStream(SEED), notNullValue(Stream.class));
+        assertThat("Failed to create an HyruleId producer", Hyrule.idStream(NB_CHAR, SEED), notNullValue(Stream.class));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        Optional<HyruleId> id = Hyrule.idStream(SEED).findFirst();
+        Optional<HyruleId> id = Hyrule.idStream(NB_CHAR, SEED).findFirst();
         if(id.isEmpty())
             fail("Failed to produce an id");
         assertThat(id.get().representation(), matchesPattern("[0-9]{9}"));
@@ -32,43 +33,43 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_comprised_of_its_seed_value_left_padded_by_zero(){
-        HyruleId id = HyruleId.of(13579);
+        HyruleId id = HyruleId.of(NB_CHAR, 13579);
         assertThat(id.representation(), is(equalTo("000013579")));
     }
 
     @Test
-    void should_be_sequentially_different(){
-        List<HyruleId> list = Hyrule.idStream(SEED)
-                .limit(10_000)
+    void should_have_no_duplicates(){
+        List<HyruleId> list = Hyrule.idStream(2, SEED)
+                .limit(99)
                 .collect(toList());
         Set<HyruleId> set = new HashSet<>(list);
-        assertThat(set.size(), is(equalTo(list.size())));
+        assertThat("the id stream contained duplicates", set.size(), is(equalTo(list.size())));
     }
 
     @Test
     void should_be_equals_if_their_seed_is_the_same(){
-        HyruleId first = HyruleId.of(123456789);
-        HyruleId second = HyruleId.of(123456789);
+        HyruleId first = HyruleId.of(NB_CHAR, 123456789);
+        HyruleId second = HyruleId.of(NB_CHAR, 123456789);
         assertThat(first, is(equalTo(second)));
     }
 
     @Test
     void should_be_different_if_their_seed_is_different(){
-        HyruleId first = HyruleId.of(123456789);
-        HyruleId second = HyruleId.of(987654321);
+        HyruleId first = HyruleId.of(NB_CHAR, 123456789);
+        HyruleId second = HyruleId.of(NB_CHAR, 987654321);
         assertThat(first, is(not(equalTo(second))));
     }
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids(){
-        Stream<HyruleId> stream = Hyrule.idStream(SEED);
+        Stream<HyruleId> stream = Hyrule.idStream(NB_CHAR, SEED);
         Optional<HyruleId> id = stream.skip(10_000).findFirst();
         assertThat("Not found that much id", id.isPresent());
     }
 
     @Test
     void should_not_be_ordered_ascending(){
-        Stream<HyruleId> stream = Hyrule.idStream(SEED);
+        Stream<HyruleId> stream = Hyrule.idStream(NB_CHAR, SEED);
         List<HyruleId> ids = stream.limit(10_000).collect(toList());
         List<HyruleId> sortedIds = ids.stream().sorted().collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
@@ -76,7 +77,7 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_not_be_ordered_descending(){
-        Stream<HyruleId> stream = Hyrule.idStream(SEED);
+        Stream<HyruleId> stream = Hyrule.idStream(NB_CHAR, SEED);
         List<HyruleId> ids = stream.limit(10_000).collect(toList());
         List<HyruleId> sortedIds = ids.stream().sorted(Comparator.reverseOrder()).collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
@@ -84,8 +85,8 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_reliably_get_specific_ids(){
-        HyruleId firstStream500thId = Hyrule.idStream(SEED).skip(500).findFirst().orElseThrow();
-        HyruleId secondStream500thId = Hyrule.idStream(SEED).skip(500).findFirst().orElseThrow();
+        HyruleId firstStream500thId = Hyrule.idStream(NB_CHAR, SEED).skip(500).findFirst().orElseThrow();
+        HyruleId secondStream500thId = Hyrule.idStream(NB_CHAR, SEED).skip(500).findFirst().orElseThrow();
         assertThat(firstStream500thId, is(equalTo(secondStream500thId)));
     }
 
