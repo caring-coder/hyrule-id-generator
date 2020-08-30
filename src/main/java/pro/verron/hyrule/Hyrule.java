@@ -1,13 +1,11 @@
-package pro.verron;
+package pro.verron.hyrule;
 
 import lombok.SneakyThrows;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;

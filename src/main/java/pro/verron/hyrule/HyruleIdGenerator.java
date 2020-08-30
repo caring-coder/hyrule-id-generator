@@ -1,4 +1,4 @@
-package pro.verron;
+package pro.verron.hyrule;
 
 import java.util.Iterator;
 import java.util.Random;

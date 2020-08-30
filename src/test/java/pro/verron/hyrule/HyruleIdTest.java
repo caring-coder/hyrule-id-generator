@@ -1,4 +1,4 @@
-package pro.verron;
+package pro.verron.hyrule;
 
 import org.junit.jupiter.api.Test;
 
@@ -89,6 +89,4 @@ class Hyrule_Id_Tests {
         HyruleId secondStream500thId = Hyrule.idStream(NB_CHAR, SEED).skip(500).findFirst().orElseThrow();
         assertThat(firstStream500thId, is(equalTo(secondStream500thId)));
     }
-
-
 }
