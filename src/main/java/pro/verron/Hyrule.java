@@ -7,8 +7,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Hyrule {
+
     public static Stream<HyruleId> idStream() {
-        Iterator<HyruleId> iterator = idIterator();
+        Iterator<HyruleId> iterator = new HyruleIdGenerator();
         int characteristics = Spliterator.ORDERED
                 + Spliterator.DISTINCT
                 + Spliterator.NONNULL
@@ -18,7 +19,4 @@ public class Hyrule {
         return StreamSupport.stream(spliterator, false);
     }
 
-    public static Iterator<HyruleId> idIterator() {
-        return new HyruleIdGenerator();
-    }
 }

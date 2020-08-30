@@ -1,28 +1,33 @@
 package pro.verron;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", Hyrule.idIterator(), notNullValue(Iterator.class));
+        assertThat("Failed to create an HyruleId producer", Hyrule.idStream(), notNullValue(Stream.class));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        HyruleId id = Hyrule.idIterator().next();
-        assertThat(id.representation(), matchesPattern("[0-9]{9}"));
+        Optional<HyruleId> id = Hyrule.idStream().findFirst();
+        if(id.isEmpty())
+            fail("Failed to produce an id");
+        assertThat(id.get().representation(), matchesPattern("[0-9]{9}"));
     }
 
     @Test
@@ -33,10 +38,11 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_sequentially_different(){
-        Iterator<HyruleId> producer = Hyrule.idIterator();
-        HyruleId first = producer.next();
-        HyruleId second = producer.next();
-        assertThat(first, is(not(equalTo(second))));
+        List<HyruleId> list = Hyrule.idStream()
+                .limit(10_000)
+                .collect(toList());
+        Set<HyruleId> set = new HashSet<>(list);
+        assertThat(set.size(), is(equalTo(list.size())));
     }
 
     @Test
