@@ -3,6 +3,8 @@ package pro.verron;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,6 +51,13 @@ class Hyrule_Id_Tests {
         HyruleId first = HyruleId.of(123456789);
         HyruleId second = HyruleId.of(987654321);
         assertThat(first, is(not(equalTo(second))));
+    }
+
+    @Test
+    void should_be_able_to_generate_a_large_number_of_ids(){
+        Stream<HyruleId> stream = HyruleId.stream();
+        Optional<HyruleId> id = stream.skip(10_000).findFirst();
+        assertThat("Not found that much id", id.isPresent());
     }
 
 
