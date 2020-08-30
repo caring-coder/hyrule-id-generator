@@ -16,12 +16,12 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", HyruleId.producer(), notNullValue(Iterator.class));
+        assertThat("Failed to create an HyruleId producer", Hyrule.idIterator(), notNullValue(Iterator.class));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        HyruleId id = HyruleId.producer().next();
+        HyruleId id = Hyrule.idIterator().next();
         assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
@@ -33,7 +33,7 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_sequentially_different(){
-        Iterator<HyruleId> producer = HyruleId.producer();
+        Iterator<HyruleId> producer = Hyrule.idIterator();
         HyruleId first = producer.next();
         HyruleId second = producer.next();
         assertThat(first, is(not(equalTo(second))));
@@ -55,7 +55,7 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids(){
-        Stream<HyruleId> stream = HyruleId.stream();
+        Stream<HyruleId> stream = Hyrule.idStream();
         Optional<HyruleId> id = stream.skip(10_000).findFirst();
         assertThat("Not found that much id", id.isPresent());
     }
