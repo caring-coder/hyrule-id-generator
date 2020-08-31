@@ -11,7 +11,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class Hyrule_Id_Tests {
 
@@ -20,15 +19,13 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", Hyrule.idStream(NB_CHAR, SEED), notNullValue(Stream.class));
+        assertThat("Failed to create an HyruleId producer", Hyrule.idGenerator(NB_CHAR, SEED), notNullValue(IdGenerator.class));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        Optional<Id> id = Hyrule.idStream(NB_CHAR, SEED).findFirst();
-        if(id.isEmpty())
-            fail("Failed to produce an id");
-        assertThat(id.get().representation(), matchesPattern("[0-9]{9}"));
+        Id id = Hyrule.idGenerator(NB_CHAR, SEED).iterator().next();
+        assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
     @Test
@@ -39,7 +36,8 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_have_no_duplicates(){
-        List<Id> list = Hyrule.idStream(2, SEED)
+        List<Id> list = Hyrule.idGenerator(2, SEED)
+                .stream()
                 .limit(99)
                 .collect(toList());
         Set<Id> set = new HashSet<>(list);
@@ -62,14 +60,14 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids(){
-        Stream<Id> stream = Hyrule.idStream(NB_CHAR, SEED);
+        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
         Optional<Id> id = stream.skip(10_000).findFirst();
         assertThat("Not found that much id", id.isPresent());
     }
 
     @Test
     void should_not_be_ordered_ascending(){
-        Stream<Id> stream = Hyrule.idStream(NB_CHAR, SEED);
+        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
         List<Id> ids = stream.limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted().collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
@@ -77,7 +75,7 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_not_be_ordered_descending(){
-        Stream<Id> stream = Hyrule.idStream(NB_CHAR, SEED);
+        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
         List<Id> ids = stream.limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted(Comparator.reverseOrder()).collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
@@ -85,8 +83,8 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_reliably_get_specific_ids(){
-        Id firstStream500thId = Hyrule.idStream(NB_CHAR, SEED).skip(500).findFirst().orElseThrow();
-        Id secondStream500thId = Hyrule.idStream(NB_CHAR, SEED).skip(500).findFirst().orElseThrow();
+        Id firstStream500thId = Hyrule.idGenerator(NB_CHAR, SEED).stream().skip(500).findFirst().orElseThrow();
+        Id secondStream500thId = Hyrule.idGenerator(NB_CHAR, SEED).stream().skip(500).findFirst().orElseThrow();
         assertThat(firstStream500thId, is(equalTo(secondStream500thId)));
     }
 }

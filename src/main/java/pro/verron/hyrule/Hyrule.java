@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
-import java.util.stream.Stream;
 
 public class Hyrule {
 
@@ -19,16 +18,18 @@ public class Hyrule {
         int serverDyingTimeout = 10;
 
         InetSocketAddress address = new InetSocketAddress(listeningPort);
-        Iterator<Id> idIterator = Hyrule.idStream(nbDigitsInIdRepresentation, prngStartingSeed).iterator();
+        Iterator<Id> idIterator = Hyrule
+                .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
+                .iterator();
 
         Server server = new Server(idIterator);
         server.run(address, serverDyingTimeout);
     }
 
     @SneakyThrows
-    public static Stream<Id> idStream(int nbChar, String initialSeed) {
+    public static IdGenerator idGenerator(int nbChar, String initialSeed) {
         SecureRandom random = getSecureRandom(initialSeed);
-        return new Generator(nbChar, random).asStream();
+        return new DefaultGenerator(nbChar, random);
     }
 
     /**
