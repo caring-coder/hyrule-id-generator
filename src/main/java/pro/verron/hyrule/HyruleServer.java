@@ -17,19 +17,12 @@ import java.util.concurrent.TimeUnit;
 public class HyruleServer {
 
     private final Iterator<HyruleId> idIterator;
-    private final InetSocketAddress address;
 
-    private HyruleServer(int nbChar, String seed, int port){
-        idIterator = Hyrule.idStream(nbChar, seed).iterator();
-        address = new InetSocketAddress(port);
+    HyruleServer(Iterator<HyruleId> idIterator){
+        this.idIterator = idIterator;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        HyruleServer hyruleServer = new HyruleServer(9, "Hyrule", 8888);
-        hyruleServer.run(10);
-    }
-
-    private void run(int timeout) throws InterruptedException, IOException {
+    public void run(InetSocketAddress address, int timeout) throws InterruptedException, IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CountDownLatch latch = new CountDownLatch(1);
         HttpServer server = HttpServer.create(address, 0);

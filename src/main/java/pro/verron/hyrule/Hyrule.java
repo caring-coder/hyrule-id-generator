@@ -2,6 +2,7 @@ package pro.verron.hyrule;
 
 import lombok.SneakyThrows;
 
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -12,6 +13,20 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Hyrule {
+
+    @SneakyThrows
+    public static void main(String[] args) {
+        int nbDigitsInIdRepresentation = 9;
+        String prngStartingSeed = "Hyrule";
+        int listeningPort = 8888;
+        int serverDyingTimeout = 10;
+
+        InetSocketAddress address = new InetSocketAddress(listeningPort);
+        Iterator<HyruleId> idIterator = Hyrule.idStream(nbDigitsInIdRepresentation, prngStartingSeed).iterator();
+
+        HyruleServer server = new HyruleServer(idIterator);
+        server.run(address, serverDyingTimeout);
+    }
 
     @SneakyThrows
     public static Stream<HyruleId> idStream(int nbChar, String initialSeed) {
