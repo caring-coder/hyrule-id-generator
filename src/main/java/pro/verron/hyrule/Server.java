@@ -14,11 +14,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class HyruleServer {
+class Server {
 
-    private final Iterator<HyruleId> idIterator;
+    private final Iterator<Id> idIterator;
 
-    HyruleServer(Iterator<HyruleId> idIterator){
+    Server(Iterator<Id> idIterator){
         this.idIterator = idIterator;
     }
 

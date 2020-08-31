@@ -3,13 +3,13 @@ package pro.verron.hyrule;
 import java.util.Iterator;
 import java.util.Random;
 
-class HyruleIdGenerator implements Iterator<HyruleId> {
+class Generator implements Iterator<Id> {
 
     private final int nbChar;
     private final int upperBound;
     private final Random random;
 
-    HyruleIdGenerator(int nbChar, Random random) {
+    Generator(int nbChar, Random random) {
         assert nbChar > 0 : "Only positive upper bound is being considered";
         this.upperBound = computeHighestPossibleValue(nbChar);
         this.nbChar = nbChar;
@@ -30,7 +30,7 @@ class HyruleIdGenerator implements Iterator<HyruleId> {
     }
 
     @Override
-    public HyruleId next() {
-        return new HyruleId(nbChar, random.nextInt(upperBound));
+    public Id next() {
+        return new Id(nbChar, random.nextInt(upperBound));
     }
 }

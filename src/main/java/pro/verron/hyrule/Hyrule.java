@@ -22,20 +22,20 @@ public class Hyrule {
         int serverDyingTimeout = 10;
 
         InetSocketAddress address = new InetSocketAddress(listeningPort);
-        Iterator<HyruleId> idIterator = Hyrule.idStream(nbDigitsInIdRepresentation, prngStartingSeed).iterator();
+        Iterator<Id> idIterator = Hyrule.idStream(nbDigitsInIdRepresentation, prngStartingSeed).iterator();
 
-        HyruleServer server = new HyruleServer(idIterator);
+        Server server = new Server(idIterator);
         server.run(address, serverDyingTimeout);
     }
 
     @SneakyThrows
-    public static Stream<HyruleId> idStream(int nbChar, String initialSeed) {
+    public static Stream<Id> idStream(int nbChar, String initialSeed) {
         SecureRandom random = getSecureRandom(initialSeed);
-        Iterator<HyruleId> iterator = new HyruleIdGenerator(nbChar, random);
+        Iterator<Id> iterator = new Generator(nbChar, random);
         int characteristics = Spliterator.ORDERED
                 + Spliterator.NONNULL
                 + Spliterator.IMMUTABLE;
-        Spliterator<HyruleId> spliterator = Spliterators.spliteratorUnknownSize(iterator, characteristics);
+        Spliterator<Id> spliterator = Spliterators.spliteratorUnknownSize(iterator, characteristics);
         return StreamSupport.stream(spliterator, false).distinct();
     }
 
