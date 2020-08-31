@@ -7,10 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class Hyrule {
 
@@ -31,12 +28,7 @@ public class Hyrule {
     @SneakyThrows
     public static Stream<Id> idStream(int nbChar, String initialSeed) {
         SecureRandom random = getSecureRandom(initialSeed);
-        Iterator<Id> iterator = new Generator(nbChar, random);
-        int characteristics = Spliterator.ORDERED
-                + Spliterator.NONNULL
-                + Spliterator.IMMUTABLE;
-        Spliterator<Id> spliterator = Spliterators.spliteratorUnknownSize(iterator, characteristics);
-        return StreamSupport.stream(spliterator, false).distinct();
+        return new Generator(nbChar, random).asStream();
     }
 
     /**

@@ -2,6 +2,10 @@ package pro.verron.hyrule;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 class Generator implements Iterator<Id> {
 
@@ -14,6 +18,14 @@ class Generator implements Iterator<Id> {
         this.upperBound = computeHighestPossibleValue(nbChar);
         this.nbChar = nbChar;
         this.random = random;
+    }
+
+    public Stream<Id> asStream() {
+        int characteristics = Spliterator.ORDERED
+                + Spliterator.NONNULL
+                + Spliterator.IMMUTABLE;
+        Spliterator<Id> spliterator = Spliterators.spliteratorUnknownSize(this, characteristics);
+        return StreamSupport.stream(spliterator, false).distinct();
     }
 
     private int computeHighestPossibleValue(int nbChar) {
