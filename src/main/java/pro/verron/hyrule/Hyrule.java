@@ -2,13 +2,31 @@ package pro.verron.hyrule;
 
 import lombok.SneakyThrows;
 
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.MessageFormat;
 import java.util.Iterator;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Hyrule {
+
+    static {
+        readLoggingConfiguration("logging.properties");
+        logger= Logger.getLogger(Hyrule.class.getName());
+    }
+
+    @SneakyThrows
+    private static void readLoggingConfiguration(String name) {
+        LogManager logManager = LogManager.getLogManager();
+        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(name);
+        logManager.readConfiguration(is);
+    }
+
+    private static final Logger logger;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -16,6 +34,9 @@ public class Hyrule {
         String prngStartingSeed = "Hyrule";
         int listeningPort = 8888;
         int serverDyingTimeout = 10;
+
+        logger.info("Hyrule identifier production system (HIPS) is starting :");
+        logger.info(()-> MessageFormat.format("HIPS will listen on port {0}", listeningPort));
 
         InetSocketAddress address = new InetSocketAddress(listeningPort);
         Iterator<Id> idIterator = Hyrule
