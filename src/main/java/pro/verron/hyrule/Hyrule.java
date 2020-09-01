@@ -56,7 +56,7 @@ public class Hyrule {
     }
 
     /**
-     * Will create a SHA1PRNG random algorithm isntance, and seed it with the given String bytes.
+     * Will create a SHA1PRNG random algorithm instance, and seed it with the given String bytes.
      * Do not hesitate to give a really long input String.
      * That algorithm has been chosen for its strength, and for the ability to be fully seeded, so allowing unit testing
      * @param initialSeed will be used to seed the SecureRandom instance

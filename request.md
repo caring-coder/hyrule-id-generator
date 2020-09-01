@@ -12,14 +12,14 @@ lui soit délivré.
 ### Description
 Chaque document possède un identifiant unique. Celui-ci a une longueur de 9
 caractères et est constitué uniquement de chiffres.
-Cet identifiant doit avoir les caractéristiques suivantes:
+Cet identifiant doit avoir les caractéristiques suivantes :
 - On ne doit pas pouvoir prédire l'identifiant qui sera attribué pour un nouveau
 document en connaissant un ou plusieurs des identifiants précédents.
 - Deux identifiants étant donnés, on ne doit pas pouvoir déterminer s'ils ont été
 générés l'un à la suite de l'autre.
 - L'identifiant ne doit contenir aucune information personnelle du demandeur
 du document.
-Afin de s'interfacer avec les applications déjà existantes:
+Afin de s'interfacer avec les applications déjà existantes :
 - Ce service devra exposer une API REST.
 - Le format des requêtes est libre, tout en respectant les standards.
 - La persistance (si nécessaire) se fera avec une base PostgreSQL.
@@ -35,9 +35,9 @@ d'une des solutions.
 uniques (black box testing) .
 ### Bonus
 Point optionnels
-- Une API sécurisée via un token JWT.
+- Une API sécurisée via un jeton JWT.
 - Un client web de démonstration en React.
-- Un git log --graph --abbrev-commit --oneline propre.
+- Un `git log --graph --abbrev-commit --oneline` propre.
 - Une démo dockerisée.
 - Une implémentation du système proposé pour tester l'unicité des identifiants
 - Toute autre proposition est bienvenue !

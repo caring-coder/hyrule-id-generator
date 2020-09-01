@@ -1,6 +1,6 @@
 # Hyrule Identifier Generator
 
-This project is based on the requirements found in the file `request.md`.
+The requirements can be found in the file `request.md`.
 You may found the answers to those requirements in the file `answers.md`.
 
 ## How to :
@@ -39,7 +39,7 @@ docker -run -p 8888:8888 "verron.pro/hyrule-id"
 ``` 
 
 ### Use the service
-Once you got the server runnig, then you will be able to query `localhost:8888/hyrule/next-id` to get new identifiers.
+Once you got the server running, then you will be able to query `localhost:8888/hyrule/next-id` to get new identifiers.
 
 When you want to kill the server, you can query `localhost:8888/hyrule/kill` and it will try to die gracefully.
 

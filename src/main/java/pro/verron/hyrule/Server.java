@@ -55,7 +55,7 @@ class Server {
         logger.info(MessageFormat.format("To kill server, query context ''{0}'' until latch count is 0, latch count is now {1}", killingUri, latch.getCount()));
         latch.await();
 
-        logger.info("Trying to terminate threadpool");
+        logger.info("Trying to terminate thread pool");
         executor.awaitTermination(timeout / 2, TimeUnit.SECONDS);
         executor.shutdown();
 

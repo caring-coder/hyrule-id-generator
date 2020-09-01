@@ -1,6 +1,6 @@
 # Création d'un identifiant unique
 
-Afin de s'interfacer avec les applications déjà existantes:
+Afin de s'interfacer avec les applications déjà existantes :
 - Ce service devra exposer une API REST.
 - Le format des requêtes est libre, tout en respectant les standards.
 - La persistance (si nécessaire) se fera avec une base PostgreSQL.
@@ -16,9 +16,9 @@ Cela dit, les contraintes mène à certaines conclusions :
  - l'absence de données personnelles empêche l'utilisation des données de l'utilisateur
  - la non-continuité empêche d'utiliser un simple compteur, ou le système de temps
  - l'imprédictibilité, implique une sortie statistiquement aléatoire, 
- elle peut être obtenue en passant les identifiants via une fonction d’hashage, mais on risque des collisions de hash
+ elle peut être obtenue en passant les identifiants via une fonction d’hachage, mais on risque des collisions d’hash
  
-Quitte à passer par une fonction d’hashage et gérer les collisions d’hash, 
+Quitte à passer par une fonction d’hachage et gérer les collisions d’hash, 
 on peut directement utiliser un générateur de nombre pseudo aléatoire et en retirer les doublons.
 
 ## Architecture possibles
@@ -32,9 +32,9 @@ Si on peut prouver que l'algorithme proposé fonctionne sur une étendue plus co
 
 ## Bonus
 Point optionnels
- - TODO - Une API sécurisée via un token JWT.
+ - TODO - Une API sécurisée via un jeton JWT.
  - TODO - Un client web de démonstration en React.
- - DONE - Un git log --graph --abbrev-commit --oneline propre.
+ - DONE - Un `git log --graph --abbrev-commit --oneline` propre.
  - DONE - Une démo dockerisée.
  - DONE - Une implémentation du système proposé pour tester l'unicité des identifiants
  - TODO - Toute autre proposition est bienvenue !
