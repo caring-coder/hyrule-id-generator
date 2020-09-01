@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 class RawIterator implements Iterator<Id> {
+
     private final int nbChar;
     private final Random random;
     private final int upperBound;
@@ -21,6 +22,11 @@ class RawIterator implements Iterator<Id> {
 
     @Override
     public Id next() {
-        return new Id(nbChar, random.nextInt(upperBound));
+        /*
+        TODO: this method could be considerably improved by using nextBytes()
+         and working with bytes operations, it could also precompute values.
+        */
+        int value = random.nextInt(upperBound);
+        return new Id(nbChar, value);
     }
 }

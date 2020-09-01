@@ -16,6 +16,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+/*
+ TODO: this class still need to be unit tested,
+  to do so, we should introduce modularity by
+  allowing a client to setup the context.
+  That way, we could remove all Hyrule related code from this file.
+*/
 class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class.getName());

@@ -30,6 +30,8 @@ public class Hyrule {
 
     @SneakyThrows
     public static void main(String[] args) {
+        // TODO: Make all those parameters as program input (args or properties file)
+        // TODO: Maybe could allow to start as a command line program as an option
         int nbDigitsInIdRepresentation = 9;
         String prngStartingSeed = "Hyrule";
         int listeningPort = 8888;
@@ -55,7 +57,7 @@ public class Hyrule {
 
     /**
      * Will create a SHA1PRNG random algorithm isntance, and seed it with the given String bytes.
-     * Do not hesitate to give a relly long input String.
+     * Do not hesitate to give a really long input String.
      * That algorithm has been chosen for its strength, and for the ability to be fully seeded, so allowing unit testing
      * @param initialSeed will be used to seed the SecureRandom instance
      * @return a seeded SecureRandom instance
