@@ -1,9 +1,9 @@
 package pro.verron.hyrule;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.*;
@@ -17,23 +17,32 @@ class IdGenerator_Tests {
     public static final String SEED = "HyruleDefaultIdStreamSeed";
     public static final int NB_CHAR = 9;
 
+    private IdGenerator generator;
+
+    @BeforeEach
+    public void before() {
+        generator = newGenerator();
+    }
+
+    private IdGenerator newGenerator() {
+        return Hyrule.idGenerator(NB_CHAR, SEED);
+    }
+
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        IdGenerator generator = Hyrule.idGenerator(NB_CHAR, SEED);
         assertThat("Failed to create an HyruleId producer", generator, is(notNullValue(IdGenerator.class)));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
-        Id id = idGenerator.iterator().next();
+        Id id = generator.iterator().next();
         assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
     @Test
     void should_have_no_duplicates(){
-        IdGenerator idGenerator = Hyrule.idGenerator(2, SEED);
-        List<Id> list = idGenerator
+        IdGenerator smallGenerator = Hyrule.idGenerator(2, SEED);
+        List<Id> list = smallGenerator
                 .stream()
                 .limit(99)
                 .collect(toList());
@@ -43,35 +52,28 @@ class IdGenerator_Tests {
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids(){
-        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
-        Optional<Id> id = idGenerator.stream().skip(10_000).findFirst();
+        Optional<Id> id = generator.stream().skip(10_000).findFirst();
         assertThat("Not found that much id", id.isPresent());
     }
 
     @Test
     void should_not_be_ordered_ascending(){
-        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
-        List<Id> ids = idGenerator.stream().limit(10_000).collect(toList());
+        List<Id> ids = generator.stream().limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted().collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
-
-        List<Integer> l1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
-        List<Integer> l2 = new LinkedList<>(Arrays.asList(1, 2, 3, 4));
-        assertThat(l1, is(not(equalTo(l2))));
     }
 
     @Test
     void should_not_be_ordered_descending(){
-        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
-        List<Id> ids = stream.limit(10_000).collect(toList());
+        List<Id> ids = generator.stream().limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted(Comparator.reverseOrder()).collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
     }
 
     @Test
     void should_reliably_get_specific_ids(){
-        Id firstStream500thId = Hyrule.idGenerator(NB_CHAR, SEED).stream().skip(500).findFirst().orElseThrow();
-        Id secondStream500thId = Hyrule.idGenerator(NB_CHAR, SEED).stream().skip(500).findFirst().orElseThrow();
+        Id firstStream500thId = generator.stream().skip(500).findFirst().orElseThrow();
+        Id secondStream500thId = newGenerator().stream().skip(500).findFirst().orElseThrow();
         assertThat(firstStream500thId, is(equalTo(secondStream500thId)));
     }
 
