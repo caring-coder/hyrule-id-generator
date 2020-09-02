@@ -30,4 +30,18 @@ public class Id_Tests {
         Id second = Id.of(NB_CHAR, 987654321);
         assertThat(first, is(not(equalTo(second))));
     }
+
+    @Test
+    void should_be_represented_by_same_string_when_identical_seed(){
+        Id first = Id.of(NB_CHAR, 123456789);
+        Id second = Id.of(NB_CHAR, 123456789);
+        assertThat(first.toString(), is(equalTo(second.toString())));
+    }
+
+    @Test
+    void should_not_be_represented_by_same_string_when_different_seed(){
+        Id first = Id.of(NB_CHAR, 123456789);
+        Id second = Id.of(NB_CHAR, 987654321);
+        assertThat(first.toString(), is(not(equalTo(second.toString()))));
+    }
 }
