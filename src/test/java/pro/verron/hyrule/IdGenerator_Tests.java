@@ -12,7 +12,7 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-class Hyrule_Id_Tests {
+class IdGenerator_Tests {
 
     public static final String SEED = "HyruleDefaultIdStreamSeed";
     public static final int NB_CHAR = 9;
