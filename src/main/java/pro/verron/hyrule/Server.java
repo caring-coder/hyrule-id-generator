@@ -3,6 +3,7 @@ package pro.verron.hyrule;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,15 +26,17 @@ import java.util.logging.Logger;
 class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class.getName());
-
     private final Iterator<Id> idIterator;
+
+    private HttpServer server;
 
     Server(Iterator<Id> idIterator){
         this.idIterator = idIterator;
     }
 
-    public void run(InetSocketAddress address, int timeout) throws InterruptedException, IOException {
-        HttpServer server = HttpServer.create(address, 0);
+    @SneakyThrows
+    public void run(InetSocketAddress address, int timeout) {
+        server = HttpServer.create(address, 0);
         logger.info(()-> MessageFormat.format("Created server at address {0}", server.getAddress()));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -59,6 +62,26 @@ class Server {
         executor.awaitTermination(timeout / 2, TimeUnit.SECONDS);
         executor.shutdown();
 
+        logger.info("Trying to stop server");
+        server.stop(timeout / 2);
+        logger.info("Stopped server");
+    }
+
+    @SneakyThrows
+    public void start(InetSocketAddress address) {
+        server = HttpServer.create(address, 0);
+        logger.info(()-> MessageFormat.format("Created server at address {0}", server.getAddress()));
+
+        String newIdUri = "/hyrule/new-id";
+        logger.info(MessageFormat.format("Loading context {0} to query new id.", newIdUri));
+        server.createContext(newIdUri, this::newId);
+
+        logger.info("Trying to start server");
+        server.start();
+        logger.info("Started server");
+    }
+
+    public void stop(int timeout){
         logger.info("Trying to stop server");
         server.stop(timeout / 2);
         logger.info("Stopped server");
