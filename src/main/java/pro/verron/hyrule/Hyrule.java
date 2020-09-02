@@ -1,5 +1,6 @@
 package pro.verron.hyrule;
 
+import com.sun.net.httpserver.HttpHandler;
 import lombok.SneakyThrows;
 
 import java.io.InputStream;
@@ -8,7 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -45,8 +49,22 @@ public class Hyrule {
                 .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
                 .iterator();
 
-        Server server = new Server(idIterator);
-        server.run(address, serverDyingTimeout);
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        Server server = new Server(address);
+        server.createContext("/kill/", Server.respond(200, () -> unlock(lock)));
+        server.createContext("/hyrule/new-id/", Server.respond(200, () -> idIterator.next().representation()));
+        server.start();
+
+        lock.await();
+
+        server.stop(serverDyingTimeout);
+    }
+
+    public static String unlock(CountDownLatch lock) {
+        lock.countDown();
+        return "Unlock thread";
     }
 
     @SneakyThrows
