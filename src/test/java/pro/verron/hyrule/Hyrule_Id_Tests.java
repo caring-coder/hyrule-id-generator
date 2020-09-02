@@ -19,12 +19,14 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", Hyrule.idGenerator(NB_CHAR, SEED), notNullValue(IdGenerator.class));
+        IdGenerator generator = Hyrule.idGenerator(NB_CHAR, SEED);
+        assertThat("Failed to create an HyruleId producer", generator, is(notNullValue(IdGenerator.class)));
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits(){
-        Id id = Hyrule.idGenerator(NB_CHAR, SEED).iterator().next();
+        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
+        Id id = idGenerator.iterator().next();
         assertThat(id.representation(), matchesPattern("[0-9]{9}"));
     }
 
@@ -36,7 +38,8 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_have_no_duplicates(){
-        List<Id> list = Hyrule.idGenerator(2, SEED)
+        IdGenerator idGenerator = Hyrule.idGenerator(2, SEED);
+        List<Id> list = idGenerator
                 .stream()
                 .limit(99)
                 .collect(toList());
@@ -60,17 +63,21 @@ class Hyrule_Id_Tests {
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids(){
-        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
-        Optional<Id> id = stream.skip(10_000).findFirst();
+        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
+        Optional<Id> id = idGenerator.stream().skip(10_000).findFirst();
         assertThat("Not found that much id", id.isPresent());
     }
 
     @Test
     void should_not_be_ordered_ascending(){
-        Stream<Id> stream = Hyrule.idGenerator(NB_CHAR, SEED).stream();
-        List<Id> ids = stream.limit(10_000).collect(toList());
+        IdGenerator idGenerator = Hyrule.idGenerator(NB_CHAR, SEED);
+        List<Id> ids = idGenerator.stream().limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted().collect(toList());
         assertThat(sortedIds, is(not(equalTo(ids))));
+
+        List<Integer> l1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+        List<Integer> l2 = new LinkedList<>(Arrays.asList(1, 2, 3, 4));
+        assertThat(l1, is(not(equalTo(l2))));
     }
 
     @Test
