@@ -3,6 +3,7 @@ package pro.verron.hyrule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -20,11 +21,11 @@ class IdGenerator_Tests {
     private IdGenerator generator;
 
     @BeforeEach
-    public void before() {
+    public void before() throws NoSuchAlgorithmException {
         generator = newGenerator();
     }
 
-    private IdGenerator newGenerator() {
+    private IdGenerator newGenerator() throws NoSuchAlgorithmException {
         return Hyrule.idGenerator(NB_CHAR, SEED);
     }
 
@@ -40,7 +41,7 @@ class IdGenerator_Tests {
     }
 
     @Test
-    void should_have_no_duplicates(){
+    void should_have_no_duplicates() throws NoSuchAlgorithmException {
         IdGenerator smallGenerator = Hyrule.idGenerator(2, SEED);
         List<Id> list = smallGenerator
                 .stream()
@@ -71,7 +72,7 @@ class IdGenerator_Tests {
     }
 
     @Test
-    void should_reliably_get_specific_ids(){
+    void should_reliably_get_specific_ids() throws NoSuchAlgorithmException {
         Id firstStream500thId = generator.stream().skip(500).findFirst().orElseThrow();
         Id secondStream500thId = newGenerator().stream().skip(500).findFirst().orElseThrow();
         assertThat(firstStream500thId, is(equalTo(secondStream500thId)));
