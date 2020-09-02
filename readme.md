@@ -39,7 +39,7 @@ docker -run -p 8888:8888 "verron.pro/hyrule-id"
 ``` 
 
 ### Use the service
-Once you got the server running, then you will be able to query `localhost:8888/hyrule/next-id` to get new identifiers.
+Once you got the server running, then you will be able to query `localhost:8888/hyrule/new-id/` to get new identifiers.
 
-When you want to kill the server, you can query `localhost:8888/hyrule/kill` and it will try to die gracefully.
+When you want to kill the server, you can query `localhost:8888/kill/` and it will try to die gracefully.
 
