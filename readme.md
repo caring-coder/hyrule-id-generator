@@ -35,7 +35,7 @@ docker build -t "verron.pro/hyrule-id" .
 ```
 You can run it with the command
 ```shell script
-docker -run -p 8888:8888 "verron.pro/hyrule-id"
+docker run -p 8888:8888 "verron.pro/hyrule-id"
 ``` 
 
 ### Use the service
