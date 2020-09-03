@@ -24,6 +24,11 @@ cd target
 java -jar target/hyrule-id-<version>.jar
 ``` 
 
+For mutation testing you may run 
+```shell script
+mvn org.pitest:pitest-maven:mutationCoverage
+```
+
 ### Build docker image
 
 To build this image you need (obviously) :
