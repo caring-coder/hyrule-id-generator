@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Id_Tests {
 
@@ -73,5 +74,10 @@ public class Id_Tests {
         assertThat(two, is(greaterThan(one)));
         assertThat(one, is(lessThan(two)));
         assertThat(one, lessThan(null));
+    }
+
+    @Test
+    void should_be_writable_with_number_of_char_chosen(){
+        assertThrows(AssertionError.class, ()->Id.of(2, 3456));
     }
 }
