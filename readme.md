@@ -14,20 +14,24 @@ To build this project you need :
 Then type in a command line :
 ```shell script
 cd <project-root>
-mvn clean install
+mvn clean package
 ```
 
 The binary will be found at `target/hyrule-id-<version>.jar`
 You can run it with the command
 ```shell script
-cd target
+cd <project-root>
 java -jar target/hyrule-id-<version>.jar
 ``` 
 
-For mutation testing you may run 
+### Build documentation site
+Attention, cette opération déclenchera la génération des rapports de mutation testing
 ```shell script
-mvn org.pitest:pitest-maven:mutationCoverage
+cd <project-root>
+mvn clean package site
 ```
+
+The site root will be found at `target/site/index.html`
 
 ### Build docker image
 
