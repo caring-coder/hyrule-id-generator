@@ -66,19 +66,9 @@ public class Hyrule {
 
     public static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = getSecureRandom(initialSeed);
-        assert nbChar > 0 : "Only positive upper bound is being considered";
-        int upperBound = computeHighestPossibleValue(nbChar);
-        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random, upperBound);
+        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random);
         Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream().distinct().iterator();
         return new Generator<>(distinctIdIterator);
-    }
-
-    private static int computeHighestPossibleValue(int nbChar) {
-        int top = 0;
-        for(int i = 0; i < nbChar; i++){
-            top = top * 10 + 9;
-        }
-        return top;
     }
 
     /**

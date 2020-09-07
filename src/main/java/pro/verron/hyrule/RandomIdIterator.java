@@ -9,7 +9,9 @@ class RandomIdIterator implements Iterator<Id> {
     private final Random random;
     private final int upperBound;
 
-    public RandomIdIterator(int nbChar, Random random, int upperBound) {
+    public RandomIdIterator(int nbChar, Random random) {
+        assert nbChar > 0 : "Only positive upper bound is being considered";
+        int upperBound = computeHighestPossibleValue(nbChar);
         this.nbChar = nbChar;
         this.random = random;
         this.upperBound = upperBound;
@@ -28,5 +30,13 @@ class RandomIdIterator implements Iterator<Id> {
         */
         int value = random.nextInt(upperBound);
         return new Id(nbChar, value);
+    }
+
+    private static int computeHighestPossibleValue(int nbChar) {
+        int top = 0;
+        for(int i = 0; i < nbChar; i++){
+            top = top * 10 + 9;
+        }
+        return top;
     }
 }
