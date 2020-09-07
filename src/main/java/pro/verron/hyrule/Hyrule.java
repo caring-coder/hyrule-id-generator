@@ -3,23 +3,17 @@ package pro.verron.hyrule;
 import lombok.SneakyThrows;
 
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.MessageFormat;
 import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Hyrule {
 
-    private static final Logger logger;
-
     static {
         readLoggingConfiguration("logging.properties");
-        logger = Logger.getLogger(Hyrule.class.getName());
     }
 
     @SneakyThrows
@@ -42,30 +36,8 @@ public class Hyrule {
                 .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
                 .iterator();
 
-        runasServer(idIterator, listeningPort, serverDyingTimeout);
-    }
-
-    public static void runasServer(Iterator<Id> idIterator, int listeningPort, int serverDyingTimeout) throws InterruptedException {
-        logger.info("Hyrule identifier production system (HIPS) is starting :");
-        logger.info(() -> MessageFormat.format("HIPS will listen on port {0}", listeningPort));
-
-        InetSocketAddress address = new InetSocketAddress(listeningPort);
-
-        CountDownLatch lock = new CountDownLatch(1);
-
-        Server server = new Server(address);
-        server.createContext("/kill/", Server.respond(200, () -> unlock(lock)));
-        server.createContext("/hyrule/new-id/", Server.respond(200, () -> idIterator.next().representation()));
-        server.start();
-
-        lock.await();
-
-        server.stop(serverDyingTimeout);
-    }
-
-    public static String unlock(CountDownLatch lock) {
-        lock.countDown();
-        return "Unlock thread";
+        HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
+        hyruleServer.run();
     }
 
     public static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
