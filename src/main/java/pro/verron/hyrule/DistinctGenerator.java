@@ -10,7 +10,8 @@ class DistinctGenerator implements IdGenerator {
     DistinctGenerator(int nbChar, Random random) {
         assert nbChar > 0 : "Only positive upper bound is being considered";
         int upperBound = computeHighestPossibleValue(nbChar);
-        iterator = new RawGenerator(nbChar, upperBound, random)
+        RandomIdIterator iterator = new RandomIdIterator(nbChar, random, upperBound);
+        this.iterator = new RawGenerator(iterator)
                 .stream()
                 .distinct()
                 .iterator();
