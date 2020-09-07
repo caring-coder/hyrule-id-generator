@@ -8,7 +8,7 @@ class RawGenerator implements IdGenerator {
     private final Iterator<Id> iterator;
 
     RawGenerator(int nbChar, int upperBound, Random random) {
-        this.iterator = new RawIterator(nbChar, random, upperBound);
+        this.iterator = new RandomIdIterator(nbChar, random, upperBound);
     }
 
     @Override

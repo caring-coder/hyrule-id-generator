@@ -3,11 +3,11 @@ package pro.verron.hyrule;
 import java.util.Iterator;
 import java.util.Random;
 
-class DefaultGenerator implements IdGenerator {
+class DistinctGenerator implements IdGenerator {
 
     private final Iterator<Id> iterator;
 
-    DefaultGenerator(int nbChar, Random random) {
+    DistinctGenerator(int nbChar, Random random) {
         assert nbChar > 0 : "Only positive upper bound is being considered";
         int upperBound = computeHighestPossibleValue(nbChar);
         iterator = new RawGenerator(nbChar, upperBound, random)

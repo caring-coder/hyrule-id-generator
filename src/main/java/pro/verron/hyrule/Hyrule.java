@@ -66,7 +66,7 @@ public class Hyrule {
 
     public static IdGenerator idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = getSecureRandom(initialSeed);
-        return new DefaultGenerator(nbChar, random);
+        return new DistinctGenerator(nbChar, random);
     }
 
     /**
