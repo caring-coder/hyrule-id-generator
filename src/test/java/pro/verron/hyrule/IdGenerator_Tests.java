@@ -12,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class IdGenerator_Tests {
 
@@ -38,6 +39,12 @@ class IdGenerator_Tests {
     void should_be_9_characters_long_only_be_composed_of_digits(){
         Id id = generator.iterator().next();
         assertThat(id.representation(), matchesPattern("[0-9]{9}"));
+    }
+
+    @Test
+    void shunt_have_zero_or_negative_size_characters() {
+        assertThrows(AssertionError.class, ()->Hyrule.idGenerator(0, SEED));
+        assertThrows(AssertionError.class, ()->Hyrule.idGenerator(-2, SEED));
     }
 
     @Test
