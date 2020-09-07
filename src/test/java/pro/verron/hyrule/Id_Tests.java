@@ -44,4 +44,22 @@ public class Id_Tests {
         Id second = Id.of(NB_CHAR, 987654321);
         assertThat(first.toString(), is(not(equalTo(second.toString()))));
     }
+
+    @Test
+    void should_be_equals_to_itself(){
+        Id one = Id.of(NB_CHAR, 123456789);
+        assertThat(one, is(equalTo(one)));
+    }
+
+    @Test
+    void should_not_be_equals_to_null(){
+        Id one = Id.of(NB_CHAR, 123456789);
+        assertThat(one, is(not(equalTo(null))));
+    }
+
+    @Test
+    void should_not_be_equals_to_an_unrelated_type(){
+        Id one = Id.of(NB_CHAR, 123456789);
+        assertThat(one, is(not(equalTo(new Object()))));
+    }
 }

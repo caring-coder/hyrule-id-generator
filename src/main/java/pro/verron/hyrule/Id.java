@@ -2,7 +2,7 @@ package pro.verron.hyrule;
 
 import java.util.*;
 
-public class Id implements Comparable<Id>{
+public final class Id implements Comparable<Id>{
 
     public static Id of(int nbChar, int seed) {
         return new Id(nbChar, seed);
@@ -25,7 +25,8 @@ public class Id implements Comparable<Id>{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        if (Id.class != o.getClass()) return false;
         Id id = (Id) o;
         return value == id.value;
     }
