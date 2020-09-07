@@ -38,7 +38,9 @@ public final class Id implements Comparable<Id>{
 
     @Override
     public int compareTo(Id o) {
-        return o != null ? this.value - o.value : -1;
+        return o == null
+                ? -1
+                : this.value - o.value;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package pro.verron.hyrule;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsNot.not;
 
 public class Id_Tests {
@@ -61,5 +64,14 @@ public class Id_Tests {
     void should_not_be_equals_to_an_unrelated_type(){
         Id one = Id.of(NB_CHAR, 123456789);
         assertThat(one, is(not(equalTo(new Object()))));
+    }
+
+    @Test
+    void should_be_comparable_even_with_null_values(){
+        Id one = Id.of(NB_CHAR, 1);
+        Id two = Id.of(NB_CHAR, 2);
+        assertThat(two, is(greaterThan(one)));
+        assertThat(one, is(lessThan(two)));
+        assertThat(one, lessThan(null));
     }
 }
