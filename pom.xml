@@ -75,6 +75,17 @@
                         <version>0.12</version>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <threads>1</threads>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
