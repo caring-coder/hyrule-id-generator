@@ -6,15 +6,23 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-interface IdGenerator {
+class Generator<T> {
 
-    Iterator<Id> iterator();
+    private final Iterator<T> iterator;
 
-    default Stream<Id> stream() {
+    public Generator(Iterator<T> iterator) {
+        this.iterator = iterator;
+    }
+
+    public Iterator<T> iterator(){
+        return iterator;
+    }
+
+    public Stream<T> stream() {
         int characteristics = Spliterator.ORDERED
                 + Spliterator.NONNULL
                 + Spliterator.IMMUTABLE;
-        Spliterator<Id> spliterator = Spliterators.spliteratorUnknownSize(iterator(), characteristics);
+        Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(iterator(), characteristics);
         return StreamSupport.stream(spliterator, false);
     }
 }

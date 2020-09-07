@@ -18,20 +18,20 @@ class IdGenerator_Tests {
     public static final String SEED = "HyruleDefaultIdStreamSeed";
     public static final int NB_CHAR = 9;
 
-    private IdGenerator generator;
+    private Generator<Id> generator;
 
     @BeforeEach
     public void before() throws NoSuchAlgorithmException {
         generator = newGenerator();
     }
 
-    private IdGenerator newGenerator() throws NoSuchAlgorithmException {
+    private Generator<Id> newGenerator() throws NoSuchAlgorithmException {
         return Hyrule.idGenerator(NB_CHAR, SEED);
     }
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer(){
-        assertThat("Failed to create an HyruleId producer", generator, is(notNullValue(IdGenerator.class)));
+        assertThat("Failed to create an HyruleId producer", generator, is(notNullValue(Generator.class)));
     }
 
     @Test
@@ -42,7 +42,7 @@ class IdGenerator_Tests {
 
     @Test
     void should_have_no_duplicates() throws NoSuchAlgorithmException {
-        IdGenerator smallGenerator = Hyrule.idGenerator(2, SEED);
+        Generator<Id> smallGenerator = Hyrule.idGenerator(2, SEED);
         List<Id> list = smallGenerator
                 .stream()
                 .limit(99)

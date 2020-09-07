@@ -64,12 +64,13 @@ public class Hyrule {
         return "Unlock thread";
     }
 
-    public static IdGenerator idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
+    public static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = getSecureRandom(initialSeed);
         assert nbChar > 0 : "Only positive upper bound is being considered";
         int upperBound = computeHighestPossibleValue(nbChar);
-        RandomIdIterator iterator = new RandomIdIterator(nbChar, random, upperBound);
-        return new DistinctGenerator(iterator);
+        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random, upperBound);
+        Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream().distinct().iterator();
+        return new Generator<>(distinctIdIterator);
     }
 
     private static int computeHighestPossibleValue(int nbChar) {
