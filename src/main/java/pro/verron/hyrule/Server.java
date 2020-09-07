@@ -2,8 +2,8 @@ package pro.verron.hyrule;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -16,8 +16,7 @@ class Server {
     private static final Logger logger = Logger.getLogger(Server.class.getName());
     private final HttpServer server;
 
-    @SneakyThrows
-    public Server(InetSocketAddress address) {
+    public Server(InetSocketAddress address) throws IOException {
         server = HttpServer.create();
         server.bind(address, 0);
     }
@@ -38,9 +37,8 @@ class Server {
         server.createContext(path, handler);
     }
 
-    @SneakyThrows
     public void start() {
-        logger.info(() -> MessageFormat.format("Created server at address {0}", server.getAddress()));
+        logger.info(MessageFormat.format("Created server at address {0}", server.getAddress()));
         logger.info("Trying to start server");
         server.start();
         logger.info("Started server");

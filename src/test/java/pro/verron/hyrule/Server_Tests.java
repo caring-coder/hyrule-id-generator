@@ -20,7 +20,7 @@ class Server_Tests {
     private Server server;
 
     @BeforeEach
-    public void before() {
+    public void before() throws IOException {
         server = new Server(new InetSocketAddress(8888));
         server.start();
     }

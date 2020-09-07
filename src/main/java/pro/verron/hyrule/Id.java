@@ -12,7 +12,8 @@ public final class Id implements Comparable<Id>{
     private final int value;
 
     public Id(int nbChar, int value) {
-        assert nbChar >= (int)(Math.log10(value) + 1) : "The seed should be writable with the nb of character expected";
+        if(nbChar < (int)(Math.log10(value) + 1))
+            throw new AssertionError("The seed should be writable with the nb of character expected");
         this.value = value;
         char paddingCharacter = '0';
         this.format = "%" + paddingCharacter + nbChar + "d";

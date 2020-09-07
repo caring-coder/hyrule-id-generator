@@ -1,46 +1,43 @@
 package pro.verron.hyrule;
 
-import lombok.SneakyThrows;
-
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
-public class Hyrule {
+public interface Hyrule {
 
-    static {
-        readLoggingConfiguration("logging.properties");
-    }
-
-    @SneakyThrows
-    private static void readLoggingConfiguration(String name) {
+    private static void readLoggingConfiguration(String name) throws IOException {
         LogManager logManager = LogManager.getLogManager();
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(name);
         logManager.readConfiguration(is);
     }
 
-    @SneakyThrows
-    public static void main(String[] args) {
-        // TODO: Make all those parameters as program input (args or properties file)
-        // TODO: Maybe could allow to start as a command line program as an option
-        int nbDigitsInIdRepresentation = 9;
-        String prngStartingSeed = "Hyrule";
-        int listeningPort = 8888;
-        int serverDyingTimeout = 10;
+    static void main(String[] args) {
+        try {
+            readLoggingConfiguration("logging.properties");
+            // TODO: Make all those parameters as program input (args or properties file)
+            // TODO: Maybe could allow to start as a command line program as an option
+            int nbDigitsInIdRepresentation = 9;
+            String prngStartingSeed = "Hyrule";
+            int listeningPort = 8888;
+            int serverDyingTimeout = 10;
 
-        Iterator<Id> idIterator = Hyrule
-                .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
-                .iterator();
+            Iterator<Id> idIterator = Hyrule
+                    .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
+                    .iterator();
 
-        HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
-        hyruleServer.run();
+            HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
+            hyruleServer.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
+    static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = getSecureRandom(initialSeed);
         Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random);
         Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream().distinct().iterator();

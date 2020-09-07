@@ -10,7 +10,8 @@ class RandomIdIterator implements Iterator<Id> {
     private final int upperBound;
 
     public RandomIdIterator(int nbChar, Random random) {
-        assert nbChar > 0 : "Only positive upper bound is being considered";
+        if(nbChar < 1)
+            throw new AssertionError("Only positive upper bound is being considered");
         int upperBound = computeHighestPossibleValue(nbChar);
         this.nbChar = nbChar;
         this.random = random;

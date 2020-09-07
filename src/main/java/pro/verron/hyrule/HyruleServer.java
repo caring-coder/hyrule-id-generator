@@ -1,14 +1,15 @@
 package pro.verron.hyrule;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
-public class HyruleServer {
+class HyruleServer {
 
-    private static final Logger logger = Logger.getLogger(Hyrule.class.getName());
+    private static final Logger logger = Logger.getLogger(HyruleServer.class.getName());
 
     private final Iterator<Id> idIterator;
     private final int listeningPort;
@@ -22,9 +23,9 @@ public class HyruleServer {
         this.lock = new CountDownLatch(1);
     }
 
-    public void run() throws InterruptedException {
+    public void run() throws InterruptedException, IOException {
         logger.info("Hyrule identifier production system (HIPS) is starting :");
-        logger.info(() -> MessageFormat.format("HIPS will listen on port {0}", listeningPort));
+        logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));
 
         InetSocketAddress address = new InetSocketAddress(listeningPort);
 
