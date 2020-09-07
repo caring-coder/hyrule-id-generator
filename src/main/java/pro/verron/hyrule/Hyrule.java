@@ -38,14 +38,18 @@ public class Hyrule {
         int listeningPort = 8888;
         int serverDyingTimeout = 10;
 
-        logger.info("Hyrule identifier production system (HIPS) is starting :");
-        logger.info(() -> MessageFormat.format("HIPS will listen on port {0}", listeningPort));
-
-        InetSocketAddress address = new InetSocketAddress(listeningPort);
         Iterator<Id> idIterator = Hyrule
                 .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
                 .iterator();
 
+        runasServer(idIterator, listeningPort, serverDyingTimeout);
+    }
+
+    public static void runasServer(Iterator<Id> idIterator, int listeningPort, int serverDyingTimeout) throws InterruptedException {
+        logger.info("Hyrule identifier production system (HIPS) is starting :");
+        logger.info(() -> MessageFormat.format("HIPS will listen on port {0}", listeningPort));
+
+        InetSocketAddress address = new InetSocketAddress(listeningPort);
 
         CountDownLatch lock = new CountDownLatch(1);
 
