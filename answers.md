@@ -17,17 +17,20 @@ Cela dit, les contraintes mène à certaines conclusions :
  - la non-continuité empêche d'utiliser un simple compteur, ou le système de temps
  - l'imprédictibilité, implique une sortie statistiquement aléatoire, 
  elle peut être obtenue en passant les identifiants via une fonction d’hachage, mais on risque des collisions d’hash
- 
-  |                      | Zéro données utilisateurs | Non-continuité | Imprédictible |
-  | Compteur             | OK                        | KO             | KO            |
-  | Temps                | OK                        | KO             | KO            |
-  | Données utilisateurs | KO                        | OK             | KO            |
+
+
+|                      | Zéro données utilisateurs | Non-continuité | Imprédictible |
+|----------------------|---------------------------|----------------|---------------|
+| Compteur             | OK                        | KO             | KO            |
+| Temps                | OK                        | KO             | KO            |
+| Données utilisateurs | KO                        | OK             | KO            |
  
 Quitte à passer par une fonction d’hachage et gérer les collisions d’hash, 
 on peut directement utiliser un générateur de nombre pseudo aléatoire et en retirer les doublons.
 
-  |                      | Zéro données utilisateurs | Non-continuité | Imprédictible                |
-  | PRNG                 | OK                        | OK             | OK (sans connaître le seed)  |
+|                      | Zéro données utilisateurs | Non-continuité | Imprédictible                |
+|----------------------|---------------------------|----------------|------------------------------|
+| PRNG                 | OK                        | OK             | OK (sans connaître le seed)  |
 
 
 ## Architecture possibles
@@ -35,10 +38,11 @@ Pour implémenter la solution à partir d'un générateur de nombre aléatoire, 
  - la génération de la liste complète des identifiants possibles dans un ordre aléatoire, puis le renvoi de ces identifiants à chaque requête
  - le renvoi d'une sélection aléatoire dans une liste des identifiants pas encore renvoyés par le service
  - la génération d'un nombre aléatoire, et deduplication à partir de l'historique des identifiants déjà renvoyés par le service
- 
-|                                                | Précomputation | Mémoire               | CPU                  | 
+
+|                                                | Précomputation | Mémoire               | CPU                  |
+|------------------------------------------------|----------------|-----------------------|----------------------|
 | Génération table randomisé et simple renvoi    | Forte          | Toujours Haute        | Faible               |
-| Génération table complète et renvoi randomisé  | Faible         | Décroissante          | Faible               |
+| Génération table complète et renvoi randomisé  | Moyenne        | Décroissante          | Faible               |
 | Génération randomisée, dédoublonnage et renvoi | Faible         | Croissante            | Moyenne (Croissante) |
 
 Nous avons choisi une implémentation naïve de la troisième option, 
