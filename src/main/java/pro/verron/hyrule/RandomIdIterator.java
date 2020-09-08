@@ -1,5 +1,7 @@
 package pro.verron.hyrule;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -16,6 +18,12 @@ class RandomIdIterator implements Iterator<Id> {
         this.nbChar = nbChar;
         this.random = random;
         this.upperBound = upperBound;
+    }
+
+    public static Generator<Id> generator(int nbChar, SecureRandom random) {
+        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random);
+        Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream().distinct().iterator();
+        return new Generator<>(distinctIdIterator);
     }
 
     @Override

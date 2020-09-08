@@ -26,8 +26,9 @@ public interface Hyrule {
             int listeningPort = 8888;
             int serverDyingTimeout = 10;
 
-            Iterator<Id> idIterator = Hyrule
-                    .idGenerator(nbDigitsInIdRepresentation, prngStartingSeed)
+            SecureRandom secureRandom = getSecureRandom(prngStartingSeed);
+            Iterator<Id> idIterator = RandomIdIterator
+                    .generator(nbDigitsInIdRepresentation, secureRandom)
                     .iterator();
 
             HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
