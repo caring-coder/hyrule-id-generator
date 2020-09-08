@@ -8,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Id_Tests {
@@ -77,6 +78,19 @@ public class Id_Tests {
 
     @Test
     void should_be_writable_with_number_of_char_chosen(){
+        assertDoesNotThrow(() -> Id.of(1, 3));
+        assertDoesNotThrow(() -> Id.of(2, 3));
+        assertDoesNotThrow(() -> Id.of(2, 99));
+        assertThrows(AssertionError.class, () -> Id.of(1, 43));
         assertThrows(AssertionError.class, ()->Id.of(2, 3456));
+    }
+
+    @Test
+    void should_have_compliant_hascode_implementations(){
+        Id firstOne = Id.of(NB_CHAR, 1);
+        Id secondOne = Id.of(NB_CHAR, 1);
+        Id two = Id.of(NB_CHAR, 2);
+        assertThat(firstOne.hashCode(), is(equalTo(secondOne.hashCode())));
+        assertThat(firstOne.hashCode(), is(not(equalTo(two.hashCode()))));
     }
 }
