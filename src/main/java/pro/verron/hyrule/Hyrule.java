@@ -1,5 +1,10 @@
 package pro.verron.hyrule;
 
+import picocli.CommandLine;
+import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Model.OptionSpec;
+import picocli.CommandLine.ParseResult;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +15,9 @@ import java.util.logging.LogManager;
 
 public interface Hyrule {
 
+    int ERROR_CODE = 1;
+    int SUCCESS_CODE = 0;
+
     private static void readLoggingConfiguration(String name) throws IOException {
         LogManager logManager = LogManager.getLogManager();
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(name);
@@ -17,14 +25,46 @@ public interface Hyrule {
     }
 
     static void main(String[] args) {
+        CommandLine commandLine = new CommandLine(commandSpec());
+        commandLine.setExecutionStrategy(Hyrule::run);
+        commandLine.execute(args);
+    }
+
+    private static CommandSpec commandSpec() {
+        CommandSpec spec = CommandSpec.create();
+        spec.mixinStandardHelpOptions(true);
+        spec.addOption(OptionSpec.builder("-s", "--size")
+                .type(int.class)
+                .description("size of the identifiers")
+                .build());
+        spec.addOption(OptionSpec.builder("--seed")
+                .type(String.class)
+                .description("starting seed for the generator")
+                .build());
+        spec.addOption(OptionSpec.builder("-p", "--port")
+                .type(int.class)
+                .description("listening port for http server")
+                .build());
+        spec.addOption(OptionSpec.builder("--timeout")
+                .type(int.class)
+                .description("waiting timeout for http server")
+                .build());
+        return spec;
+    }
+
+    private static int run(ParseResult args) {
+        // handle requests for help or version information
+        Integer helpExitCode = CommandLine.executeHelpRequest(args);
+        if (helpExitCode != null) return helpExitCode;
+
         try {
             readLoggingConfiguration("logging.properties");
             // TODO: Make all those parameters as program input (args or properties file)
             // TODO: Maybe could allow to start as a command line program as an option
-            int nbDigitsInIdRepresentation = 9;
-            String prngStartingSeed = "Hyrule";
-            int listeningPort = 8888;
-            int serverDyingTimeout = 10;
+            int nbDigitsInIdRepresentation = args.matchedOptionValue("--size", 9);
+            String prngStartingSeed = args.matchedOptionValue("--seed", "Hyrule");
+            int listeningPort = args.matchedOptionValue("--port", 8888);
+            int serverDyingTimeout = args.matchedOptionValue("--timeout", 10);
 
             SecureRandom secureRandom = getSecureRandom(prngStartingSeed);
             Iterator<Id> idIterator = RandomIdIterator
@@ -33,16 +73,13 @@ public interface Hyrule {
 
             HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
             hyruleServer.run();
+            return SUCCESS_CODE;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            String className = Hyrule.class.getName();
+            String methodName = Thread.currentThread().getStackTrace()[0].getMethodName();
+            LogManager.getLogManager().getLogger(className).throwing(className, methodName, e);
+            return ERROR_CODE;
         }
-    }
-
-    static Generator<Id> idGenerator(int nbChar, String initialSeed) throws NoSuchAlgorithmException {
-        SecureRandom random = getSecureRandom(initialSeed);
-        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random);
-        Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream().distinct().iterator();
-        return new Generator<>(distinctIdIterator);
     }
 
     /**
@@ -54,10 +91,9 @@ public interface Hyrule {
      * @return a seeded SecureRandom instance
      * @throws NoSuchAlgorithmException in case there is no provider for SHA1PRNG algorithm
      */
-    private static SecureRandom getSecureRandom(String initialSeed) throws NoSuchAlgorithmException {
+    static SecureRandom getSecureRandom(String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         random.setSeed(initialSeed.getBytes(StandardCharsets.UTF_8));
         return random;
     }
-
 }
