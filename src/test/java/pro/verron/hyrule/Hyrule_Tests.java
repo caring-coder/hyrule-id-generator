@@ -17,18 +17,19 @@ public class Hyrule_Tests {
     private Thread thread;
 
     @BeforeEach
+    @Timeout(10)
     public void before(){
         thread = new Thread(() -> Hyrule.main(new String[0]));
         thread.start();
     }
 
     @AfterEach
-    @Timeout(30)
+    @Timeout(20)
     public void after() throws InterruptedException, IOException {
         HttpResponse<String> response = sendGetRequest("http://localhost:8888/kill/");
         assertThat(response.body(), is(equalTo("Unlock thread")));
         //This join call let's the test fails when it dying in time longer than the timeout in annotation
-        thread.join();
+        thread.join(10_000);
     }
 
     public static HttpResponse<String> sendGetRequest(String s) throws IOException, InterruptedException {
@@ -38,11 +39,10 @@ public class Hyrule_Tests {
     }
 
     @Test
-    @Timeout(value=10)
+    @Timeout(10)
     void should_be_able_to_get_an_id() throws IOException, InterruptedException {
         HttpResponse<String> response = sendGetRequest("http://localhost:8888/hyrule/new-id/");
         String firstId = "783294182";
         assertThat(response.body(), is(equalTo(firstId)));
     }
-
 }
