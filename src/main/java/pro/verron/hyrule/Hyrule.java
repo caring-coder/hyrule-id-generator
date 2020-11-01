@@ -7,13 +7,18 @@ import picocli.CommandLine.ParseResult;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public interface Hyrule {
+
+    Logger logger = Logger.getLogger(Hyrule.class.getName());
 
     int ERROR_CODE = 1;
     int SUCCESS_CODE = 0;
@@ -71,8 +76,14 @@ public interface Hyrule {
                     .generator(nbDigitsInIdRepresentation, secureRandom)
                     .iterator();
 
-            HyruleServer hyruleServer = new HyruleServer(idIterator, listeningPort, serverDyingTimeout);
-            hyruleServer.run();
+            logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));
+            InetSocketAddress address = new InetSocketAddress(listeningPort);
+            Server server = new Server(address);
+
+            HyruleServer hyruleServer = new HyruleServer(idIterator);
+            hyruleServer.run(server);
+
+            server.stop(serverDyingTimeout);
             return SUCCESS_CODE;
         } catch (Exception e) {
             String className = Hyrule.class.getName();

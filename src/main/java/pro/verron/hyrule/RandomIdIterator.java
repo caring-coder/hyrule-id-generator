@@ -1,6 +1,5 @@
 package pro.verron.hyrule;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Random;
