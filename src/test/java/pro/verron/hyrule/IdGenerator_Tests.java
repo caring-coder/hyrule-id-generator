@@ -2,6 +2,10 @@ package pro.verron.hyrule;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pro.verron.hyrule.Generator;
+import pro.verron.hyrule.Hyrule;
+import pro.verron.hyrule.Id;
+import pro.verron.hyrule.RandomIdIterator;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;

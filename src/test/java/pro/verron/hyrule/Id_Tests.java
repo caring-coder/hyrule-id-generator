@@ -1,6 +1,7 @@
 package pro.verron.hyrule;
 
 import org.junit.jupiter.api.Test;
+import pro.verron.hyrule.Id;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

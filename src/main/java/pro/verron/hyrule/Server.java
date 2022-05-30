@@ -11,7 +11,7 @@ import java.text.MessageFormat;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-class Server {
+public class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class.getName());
     private final HttpServer server;

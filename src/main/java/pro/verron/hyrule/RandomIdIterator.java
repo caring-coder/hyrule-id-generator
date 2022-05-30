@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Random;
 
-class RandomIdIterator implements Iterator<Id> {
+public class RandomIdIterator implements Iterator<Id> {
 
     private final int nbChar;
     private final Random random;

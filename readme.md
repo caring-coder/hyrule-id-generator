@@ -8,8 +8,8 @@ You may found the answers to those requirements in the file `answers.md`.
 ### Build self-running jar file
 
 To build this project you need :
-- java 14
-- maven
+- java 18
+- maven 
 
 Then type in a command line :
 ```shell script

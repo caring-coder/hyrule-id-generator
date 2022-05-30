@@ -1,6 +1,7 @@
 package pro.verron.hyrule;
 
 import org.junit.jupiter.api.*;
+import pro.verron.hyrule.Hyrule;
 
 import java.io.IOException;
 import java.net.URI;

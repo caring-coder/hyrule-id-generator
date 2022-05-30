@@ -6,7 +6,7 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-class Generator<T> {
+public class Generator<T> {
 
     private final Iterator<T> iterator;
 
