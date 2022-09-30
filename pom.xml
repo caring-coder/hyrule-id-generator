@@ -8,24 +8,12 @@
     <artifactId>hyrule-id</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <encoding>UTF-8</encoding>
-        <junit-jupiter.version>5.8.1</junit-jupiter.version>
-        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-        <maven.compiler.parameters>true</maven.compiler.parameters>
-        <maven.compiler.release>17</maven.compiler.release>
-        <maven.version>3.8.3</maven.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
+                <version>3.0.0-M7</version>
                 <executions>
                     <execution>
                         <goals>
@@ -38,11 +26,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
+                <version>3.10.1</version>
                 <configuration>
                     <source>18</source>
                     <target>18</target>
-                    <encoding>${encoding}</encoding>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -62,13 +50,13 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <encoding>${encoding}</encoding>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <version>3.0.0-M7</version>
                 <configuration combine.self="append">
                     <enableAssertions>true</enableAssertions>
                     <argLine>--add-opens app/app=ALL-UNNAMED</argLine>
@@ -196,7 +184,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <release>18</release>
+                    <failOnError>false</failOnError>
                 </configuration>
             </plugin>
             <plugin>
