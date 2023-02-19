@@ -1,27 +1,30 @@
 # Hyrule Identifier Generator
 
 The requirements can be found in the file `request.md`.
-You may found the answers to those requirements in the file `answers.md`.
+You may find the answers to those requirements in the file `answers.md`.
 
 ## How to :
 
 ### Build self-running jar file
 
 To build this project you need :
-- java 18
-- maven 
+
+- java 19
+- maven
 
 Then type in a command line :
+
 ```shell script
 cd <project-root>
-mvn clean package
+mvn clean package assembly:single
 ```
 
 The binary will be found at `target/hyrule-id-<version>.jar`
 You can run it with the command
+
 ```shell script
 cd <project-root>
-java -jar target/hyrule-id-<version>.jar
+java -jar target/hyrule-id-<version>-jar-with-dependencies.jar
 ``` 
 
 ### Build documentation site

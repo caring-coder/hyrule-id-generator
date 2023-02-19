@@ -2,27 +2,17 @@ package pro.verron.hyrule;
 
 import java.util.Iterator;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Generator<T> {
+import static java.util.Spliterators.spliteratorUnknownSize;
 
-    private final Iterator<T> iterator;
-
-    public Generator(Iterator<T> iterator) {
-        this.iterator = iterator;
-    }
-
-    public Iterator<T> iterator(){
-        return iterator;
-    }
-
+public record Generator<T>(Iterator<T> iterator) {
     public Stream<T> stream() {
-        int characteristics = Spliterator.ORDERED
-                + Spliterator.NONNULL
-                + Spliterator.IMMUTABLE;
-        Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(iterator(), characteristics);
+        var spliterator = spliteratorUnknownSize(iterator,
+                Spliterator.ORDERED
+                        + Spliterator.NONNULL
+                        + Spliterator.IMMUTABLE);
         return StreamSupport.stream(spliterator, false);
     }
 }

@@ -17,9 +17,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public interface Hyrule {
-
     Logger logger = Logger.getLogger(Hyrule.class.getName());
-
     int ERROR_CODE = 1;
     int SUCCESS_CODE = 0;
 

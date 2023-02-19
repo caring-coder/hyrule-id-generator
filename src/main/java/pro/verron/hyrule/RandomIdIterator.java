@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class RandomIdIterator implements Iterator<Id> {
-
     private final int nbChar;
     private final Random random;
     private final int upperBound;

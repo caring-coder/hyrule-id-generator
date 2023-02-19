@@ -1,13 +1,11 @@
 package pro.verron.hyrule;
 
-import java.util.*;
+import java.util.Objects;
 
 public final class Id implements Comparable<Id>{
-
     public static Id of(int nbChar, int seed) {
         return new Id(nbChar, seed);
     }
-
     private final String format;
     private final int value;
 
@@ -15,8 +13,7 @@ public final class Id implements Comparable<Id>{
         if(nbChar < (int)(Math.log10(value) + 1))
             throw new AssertionError("The seed should be writable with the nb of character expected");
         this.value = value;
-        char paddingCharacter = '0';
-        this.format = "%" + paddingCharacter + nbChar + "d";
+        this.format = "%" + '0' + nbChar + "d";
     }
 
     public String representation() {
@@ -39,9 +36,7 @@ public final class Id implements Comparable<Id>{
 
     @Override
     public int compareTo(Id o) {
-        return o == null
-                ? -1
-                : this.value - o.value;
+        return o == null ? -1 : this.value - o.value;
     }
 
     @Override

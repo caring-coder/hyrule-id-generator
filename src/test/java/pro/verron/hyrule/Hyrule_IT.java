@@ -1,7 +1,9 @@
 package pro.verron.hyrule;
 
-import org.junit.jupiter.api.*;
-import pro.verron.hyrule.Hyrule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,7 +16,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class Hyrule_IT {
-
     private Thread thread;
 
     @BeforeEach
@@ -29,7 +30,7 @@ public class Hyrule_IT {
     public void after() throws InterruptedException, IOException {
         HttpResponse<String> response = sendGetRequest("http://localhost:8888/kill/");
         assertThat(response.body(), is(equalTo("Unlock thread")));
-        //This join call let's the test fails when it dying in time longer than the timeout in annotation
+        //This join call lets the test fails when it's dying in time longer than the timeout in annotation
         thread.join(10_000);
     }
 

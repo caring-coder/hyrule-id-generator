@@ -3,7 +3,6 @@ package pro.verron.hyrule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pro.verron.hyrule.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,8 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-class Server_Tests {
-
+class ServerTests {
     private Server server;
 
     @BeforeEach
@@ -43,7 +41,7 @@ class Server_Tests {
     void should_be_able_to_add_a_custom_context_to_a_server() throws IOException, InterruptedException {
         int responseCode = 404;
         final String customValue = "Custom Value";
-        server.createContext("/", Server.respond(responseCode, () -> customValue));
+        server.createContext("custom description", "/custom", Server.respond(responseCode, () -> customValue));
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest query = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8888/")).build();
         HttpResponse<String> response = client.send(query, HttpResponse.BodyHandlers.ofString());

@@ -2,27 +2,22 @@ package pro.verron.hyrule;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pro.verron.hyrule.Generator;
-import pro.verron.hyrule.Hyrule;
-import pro.verron.hyrule.Id;
-import pro.verron.hyrule.RandomIdIterator;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class IdGenerator_Tests {
-
+class IdGeneratorTests {
     public static final String SEED = "HyruleDefaultIdStreamSeed";
     public static final int NB_CHAR = 9;
-
     private Generator<Id> generator;
 
     @BeforeEach
@@ -57,7 +52,7 @@ class IdGenerator_Tests {
         List<Id> list = smallGenerator
                 .stream()
                 .limit(99)
-                .collect(toList());
+                .toList();
         Set<Id> set = new HashSet<>(list);
         assertThat("the id stream contained duplicates", set.size(), is(equalTo(list.size())));
     }

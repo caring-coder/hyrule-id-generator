@@ -1,7 +1,6 @@
 package pro.verron.hyrule;
 
 import org.junit.jupiter.api.Test;
-import pro.verron.hyrule.Id;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -12,18 +11,17 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class Id_Tests {
-
+public class IdTests {
     public static final int NB_CHAR = 9;
 
     @Test
-    void should_be_comprised_of_its_seed_value_left_padded_by_zero(){
+    void should_be_comprised_of_its_seed_value_left_padded_by_zero() {
         Id id = Id.of(NB_CHAR, 13579);
         assertThat(id.representation(), is(equalTo("000013579")));
     }
 
     @Test
-    void should_be_equals_if_their_seed_is_the_same(){
+    void should_be_equals_if_their_seed_is_the_same() {
         Id first = Id.of(NB_CHAR, 123456789);
         Id second = Id.of(NB_CHAR, 123456789);
         assertThat(first, is(equalTo(second)));

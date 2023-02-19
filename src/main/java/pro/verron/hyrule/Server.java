@@ -1,5 +1,6 @@
 package pro.verron.hyrule;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -7,18 +8,30 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-public class Server {
+import static java.util.stream.Collectors.joining;
 
+public class Server {
     private static final Logger logger = Logger.getLogger(Server.class.getName());
     private final HttpServer server;
+    private final List<HttpContext> contexts = new ArrayList<>();
 
     public Server(InetSocketAddress address) throws IOException {
-        server = HttpServer.create();
-        server.bind(address, 0);
+        server = createServerBoundToAddress(address);
+        createContext("catalog endpoints", "/", respond(200, () -> contexts.stream()
+                .map(httpContext -> "%s \t: %s".formatted(httpContext.getPath(), httpContext.getAttributes().getOrDefault("description", "no description")))
+                .collect(joining("\n"))));
+        logger.info("Created server at address %s".formatted(server.getAddress()));
+    }
+
+    private static HttpServer createServerBoundToAddress(InetSocketAddress address) throws IOException {
+        HttpServer httpServer = HttpServer.create();
+        httpServer.bind(address, 0);
+        return httpServer;
     }
 
     public static HttpHandler respond(int responseCode, Supplier<String> bodySupplier) {
@@ -33,21 +46,22 @@ public class Server {
         };
     }
 
-    public void createContext(String path, HttpHandler handler) {
-        server.createContext(path, handler);
+    public void createContext(String description, String path, HttpHandler handler) {
+        logger.info("Created context at path %s".formatted(path));
+        HttpContext context = server.createContext(path, handler);
+        context.getAttributes().put("description", description);
+        contexts.add(context);
     }
 
     public void start() {
-        logger.info(MessageFormat.format("Created server at address {0}", server.getAddress()));
-        logger.info("Trying to start server");
+        logger.info("Server starting...");
         server.start();
-        logger.info("Started server");
+        logger.info("Server started");
     }
 
     public void stop(int timeout) {
-        logger.info("Trying to stop server");
+        logger.info("Server stopping in %ds...".formatted(timeout));
         server.stop(timeout);
-        logger.info("Stopped server");
+        logger.info("Server stopped");
     }
-
 }

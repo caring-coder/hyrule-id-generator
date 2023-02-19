@@ -1,16 +1,13 @@
 package pro.verron.hyrule;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
+import static pro.verron.hyrule.Server.respond;
+
 class HyruleServer {
-
     private static final Logger logger = Logger.getLogger(HyruleServer.class.getName());
-
     private final Iterator<Id> idIterator;
     private final CountDownLatch lock;
 
@@ -21,8 +18,8 @@ class HyruleServer {
 
     public void run(Server server) throws InterruptedException {
         logger.info("Hyrule identifier production system (HIPS) is starting :");
-        server.createContext("/kill/", Server.respond(200, this::unlock));
-        server.createContext("/hyrule/new-id/", Server.respond(200, this::newId));
+        server.createContext("kill server", "/kill", respond(200, this::unlock));
+        server.createContext("generate next id", "/hyrule/new-id", respond(200, this::newId));
         server.start();
         lock.await();
     }
@@ -35,5 +32,4 @@ class HyruleServer {
         lock.countDown();
         return "Unlock thread";
     }
-
 }
