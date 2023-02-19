@@ -11,9 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ServerTests {
     private Server server;
@@ -34,7 +32,7 @@ class ServerTests {
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest query = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8888/")).build();
         HttpResponse<String> response = client.send(query, HttpResponse.BodyHandlers.ofString());
-        assertThat(response.version(), is(equalTo(HttpClient.Version.HTTP_1_1)));
+        assertEquals(response.version(), HttpClient.Version.HTTP_1_1);
     }
 
     @Test
@@ -43,9 +41,9 @@ class ServerTests {
         final String customValue = "Custom Value";
         server.createContext("custom description", "/custom", Server.respond(responseCode, () -> customValue));
         HttpClient client = HttpClient.newBuilder().build();
-        HttpRequest query = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8888/")).build();
+        HttpRequest query = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8888/custom")).build();
         HttpResponse<String> response = client.send(query, HttpResponse.BodyHandlers.ofString());
-        assertThat(response.statusCode(), is(equalTo(responseCode)));
-        assertThat(response.body(), is(equalTo(customValue)));
+        assertEquals(response.statusCode(), responseCode);
+        assertEquals(response.body(), customValue);
     }
 }
