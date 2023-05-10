@@ -1,7 +1,8 @@
-package pro.verron.hyrule;
+package pro.verron.hyruletest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pro.verron.hyrule.Hyrule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -9,6 +10,9 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test Hyrule without starting the server.
+ */
 public class HyruleTests {
 
     private ByteArrayOutputStream outputStream;

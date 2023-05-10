@@ -1,9 +1,10 @@
-package pro.verron.hyrule;
+package pro.verron.hyruletest;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import pro.verron.hyrule.Hyrule;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,6 +15,9 @@ import java.net.http.HttpResponse;
 import static java.net.http.HttpResponse.BodyHandlers.ofString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test Hyrule with a running server.
+ */
 public class Hyrule_IT {
     private Thread thread;
 

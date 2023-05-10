@@ -1,9 +1,13 @@
-package pro.verron.hyrule;
+package pro.verron.hyruletest;
 
 import org.junit.jupiter.api.Test;
+import pro.verron.hyrule.Id;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test the id.
+ */
 public class IdTests {
     public static final int NB_CHAR = 9;
 
@@ -21,40 +25,40 @@ public class IdTests {
     }
 
     @Test
-    void should_be_different_if_their_seed_is_different(){
+    void should_be_different_if_their_seed_is_different() {
         Id first = Id.of(NB_CHAR, 123456789);
         Id second = Id.of(NB_CHAR, 987654321);
         assertNotEquals(first, second);
     }
 
     @Test
-    void should_be_represented_by_same_string_when_identical_seed(){
+    void should_be_represented_by_same_string_when_identical_seed() {
         Id first = Id.of(NB_CHAR, 123456789);
         Id second = Id.of(NB_CHAR, 123456789);
         assertEquals(first.toString(), second.toString());
     }
 
     @Test
-    void should_not_be_represented_by_same_string_when_different_seed(){
+    void should_not_be_represented_by_same_string_when_different_seed() {
         Id first = Id.of(NB_CHAR, 123456789);
         Id second = Id.of(NB_CHAR, 987654321);
         assertNotEquals(first.toString(), second.toString());
     }
 
     @Test
-    void should_be_equals_to_itself(){
+    void should_be_equals_to_itself() {
         Id one = Id.of(NB_CHAR, 123456789);
         assertEquals(one, one);
     }
 
     @Test
-    void should_not_be_equals_to_null(){
+    void should_not_be_equals_to_null() {
         Id one = Id.of(NB_CHAR, 123456789);
         assertNotEquals(one, null);
     }
 
     @Test
-    void should_not_be_equals_to_an_unrelated_type(){
+    void should_not_be_equals_to_an_unrelated_type() {
         Id one = Id.of(NB_CHAR, 123456789);
         assertNotEquals(one, new Object());
     }
@@ -69,12 +73,12 @@ public class IdTests {
     }
 
     @Test
-    void should_be_writable_with_number_of_char_chosen(){
+    void should_be_writable_with_number_of_char_chosen() {
         assertDoesNotThrow(() -> Id.of(1, 3));
         assertDoesNotThrow(() -> Id.of(2, 3));
         assertDoesNotThrow(() -> Id.of(2, 99));
         assertThrows(AssertionError.class, () -> Id.of(1, 43));
-        assertThrows(AssertionError.class, ()->Id.of(2, 3456));
+        assertThrows(AssertionError.class, () -> Id.of(2, 3456));
     }
 
     @Test

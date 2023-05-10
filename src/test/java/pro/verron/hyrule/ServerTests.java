@@ -1,8 +1,9 @@
-package pro.verron.hyrule;
+package pro.verron.hyruletest;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pro.verron.hyrule.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,6 +14,9 @@ import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test the server.
+ */
 class ServerTests {
     private Server server;
 

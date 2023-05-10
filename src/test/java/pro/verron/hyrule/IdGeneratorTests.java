@@ -13,6 +13,9 @@ import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test the id generator.
+ */
 class IdGeneratorTests {
     public static final String SEED = "HyruleDefaultIdStreamSeed";
     public static final int NB_CHAR = 9;
@@ -28,20 +31,20 @@ class IdGeneratorTests {
     }
 
     @Test
-    void should_be_able_to_create_an_hyrule_id_producer(){
+    void should_be_able_to_create_an_hyrule_id_producer() {
         assertNotNull(generator, "Failed to create an HyruleId producer");
     }
 
     @Test
-    void should_be_9_characters_long_only_be_composed_of_digits(){
+    void should_be_9_characters_long_only_be_composed_of_digits() {
         Id id = generator.iterator().next();
         assertTrue(id.representation().matches("[0-9]{9}"));
     }
 
     @Test
     void shunt_have_zero_or_negative_size_characters() {
-        assertThrows(AssertionError.class, ()-> RandomIdIterator.generator(0, Hyrule.getSecureRandom(SEED)));
-        assertThrows(AssertionError.class, ()-> RandomIdIterator.generator(-2, Hyrule.getSecureRandom(SEED)));
+        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(0, Hyrule.getSecureRandom(SEED)));
+        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(-2, Hyrule.getSecureRandom(SEED)));
     }
 
     @Test
@@ -56,13 +59,13 @@ class IdGeneratorTests {
     }
 
     @Test
-    void should_be_able_to_generate_a_large_number_of_ids(){
+    void should_be_able_to_generate_a_large_number_of_ids() {
         Optional<Id> id = generator.stream().skip(10_000).findFirst();
         assertTrue(id.isPresent(), "Not found that much id");
     }
 
     @Test
-    void should_not_be_ordered_ascending(){
+    void should_not_be_ordered_ascending() {
         List<Id> ids = generator.stream().limit(10_000).collect(toList());
         List<Id> sortedIds = ids.stream().sorted().collect(toList());
         assertNotEquals(sortedIds, ids);
