@@ -16,6 +16,12 @@ import java.util.Iterator;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+/**
+ * This class is the entry point of the program.
+ * It will parse the command line arguments, and start the server.
+ * <p>
+ * It will also configure the logging system.
+ */
 public interface Hyrule {
     Logger logger = Logger.getLogger(Hyrule.class.getName());
     int ERROR_CODE = 1;
