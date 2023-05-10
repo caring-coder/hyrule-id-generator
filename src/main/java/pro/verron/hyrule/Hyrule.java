@@ -22,10 +22,15 @@ import java.util.logging.Logger;
  * <p>
  * It will also configure the logging system.
  */
-public interface Hyrule {
-    Logger logger = Logger.getLogger(Hyrule.class.getName());
-    int ERROR_CODE = 1;
-    int SUCCESS_CODE = 0;
+public class Hyrule {
+
+    private static final Logger logger = Logger.getLogger(Hyrule.class.getName());
+    private static final int ERROR_CODE = 1;
+    private static final int SUCCESS_CODE = 0;
+
+    private Hyrule() {
+        throw new IllegalStateException("Class should not be instantiated");
+    }
 
     private static void readLoggingConfiguration(String name) throws IOException {
         LogManager logManager = LogManager.getLogManager();
@@ -33,7 +38,12 @@ public interface Hyrule {
         logManager.readConfiguration(is);
     }
 
-    static void main(String[] args) {
+    /**
+     * Start the program after parsing the command line arguments.
+     *
+     * @param args the command line arguments.
+     */
+    public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(commandSpec());
         commandLine.setExecutionStrategy(Hyrule::run);
         commandLine.execute(args);
@@ -82,12 +92,10 @@ public interface Hyrule {
 
             logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));
             InetSocketAddress address = new InetSocketAddress(listeningPort);
-            Server server = new Server(address);
 
-            HyruleServer hyruleServer = new HyruleServer(idIterator);
-            hyruleServer.run(server);
 
-            server.stop(serverDyingTimeout);
+            HyruleServer hyruleServer = new HyruleServer(idIterator, address);
+            hyruleServer.run(serverDyingTimeout);
             return SUCCESS_CODE;
         } catch (Exception e) {
             String className = Hyrule.class.getName();
@@ -106,7 +114,7 @@ public interface Hyrule {
      * @return a seeded SecureRandom instance
      * @throws NoSuchAlgorithmException in case there is no provider for SHA1PRNG algorithm
      */
-    static SecureRandom getSecureRandom(String initialSeed) throws NoSuchAlgorithmException {
+    public static SecureRandom getSecureRandom(String initialSeed) throws NoSuchAlgorithmException {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         random.setSeed(initialSeed.getBytes(StandardCharsets.UTF_8));
         return random;

@@ -1,8 +1,7 @@
-package pro.verron.hyruletest;
+package pro.verron.hyrule;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pro.verron.hyrule.Hyrule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

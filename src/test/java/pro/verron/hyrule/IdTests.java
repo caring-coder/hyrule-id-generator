@@ -1,7 +1,6 @@
-package pro.verron.hyruletest;
+package pro.verron.hyrule;
 
 import org.junit.jupiter.api.Test;
-import pro.verron.hyrule.Id;
 
 import static org.junit.jupiter.api.Assertions.*;
 

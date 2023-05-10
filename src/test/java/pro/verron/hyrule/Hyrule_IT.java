@@ -1,10 +1,9 @@
-package pro.verron.hyruletest;
+package pro.verron.hyrule;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import pro.verron.hyrule.Hyrule;
 
 import java.io.IOException;
 import java.net.URI;
