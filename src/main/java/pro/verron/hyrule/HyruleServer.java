@@ -15,7 +15,7 @@ class HyruleServer {
     private static final Logger logger = Logger.getLogger(HyruleServer.class.getName());
     private final Iterator<Id> idIterator;
     private final CountDownLatch lock;
-    private final Server server;
+    private final Server instance;
 
     /**
      * Create a new Hyrule server with two endpoints:
@@ -28,7 +28,7 @@ class HyruleServer {
      * @param address    the address to bind the server to.
      */
     public HyruleServer(Iterator<Id> idIterator, InetSocketAddress address) throws IOException {
-        this.server = newServer(address);
+        this.instance = newServer(address);
         this.idIterator = idIterator;
         this.lock = new CountDownLatch(1);
     }
@@ -47,9 +47,9 @@ class HyruleServer {
      */
     public void run(int serverDyingTimeout) throws InterruptedException {
         logger.info("Hyrule identifier production system (HIPS) is starting :");
-        server.start();
+        instance.start();
         lock.await();
-        server.stop(serverDyingTimeout);
+        instance.stop(serverDyingTimeout);
     }
 
     /**
