@@ -9,7 +9,7 @@ You may find the answers to those requirements in the file `answers.md`.
 
 To build this project you need :
 
-- java 19
+- java 25
 - maven
 
 Then type in a command line :
@@ -54,4 +54,3 @@ docker run -p 8888:8888 "verron.pro/hyrule-id"
 Once you got the server running, then you will be able to query `localhost:8888/hyrule/new-id/` to get new identifiers.
 
 When you want to kill the server, you can query `localhost:8888/kill/` and it will try to die gracefully.
-

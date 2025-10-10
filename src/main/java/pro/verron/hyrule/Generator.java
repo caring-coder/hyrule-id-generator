@@ -7,19 +7,15 @@ import java.util.stream.StreamSupport;
 import static java.util.Spliterator.*;
 import static java.util.Spliterators.spliteratorUnknownSize;
 
-/**
- * A generator is an iterator that can be converted to a stream.
- *
- * @param <T>      the type of the elements of the stream
- * @param iterator the iterator to use to generate the elements of the stream.
- */
+/// A generator is an iterator that can be converted to a stream.
+///
+/// @param <T>      the type of the elements of the stream
+/// @param iterator the iterator to use to generate the elements of the stream.
 public record Generator<T>(Iterator<T> iterator) {
 
-    /**
-     * Convert this iterator to a stream.
-     *
-     * @return a stream of the elements of this iterator.
-     */
+    /// Convert this iterator to a stream.
+    ///
+    /// @return a stream of the elements of this iterator.
     public Stream<T> stream() {
         var spliterator = spliteratorUnknownSize(iterator, ORDERED + NONNULL + IMMUTABLE);
         return StreamSupport.stream(spliterator, false);

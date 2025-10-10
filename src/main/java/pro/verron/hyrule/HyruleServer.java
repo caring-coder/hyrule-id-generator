@@ -8,25 +8,21 @@ import java.util.logging.Logger;
 
 import static pro.verron.hyrule.Server.respond;
 
-/**
- * A server that generates ids.
- */
+/// A server that generates ids.
 class HyruleServer {
     private static final Logger logger = Logger.getLogger(HyruleServer.class.getName());
     private final Iterator<Id> idIterator;
     private final CountDownLatch lock;
     private final Server instance;
 
-    /**
-     * Create a new Hyrule server with two endpoints:
-     * <ul>
-     *     <li>GET /kill : stop the server</li>
-     *     <li>GET /hyrule/new-id : return the next id</li>
-     * </ul>
-     *
-     * @param idIterator the iterator to use to generate the ids.
-     * @param address    the address to bind the server to.
-     */
+    /// Create a new Hyrule server with two endpoints:
+    ///
+    ///   - GET /kill : stop the server
+    ///   - GET /hyrule/new-id : return the next id
+    ///
+    ///
+    /// @param idIterator the iterator to use to generate the ids.
+    /// @param address    the address to bind the server to.
     public HyruleServer(Iterator<Id> idIterator, InetSocketAddress address) throws IOException {
         this.instance = newServer(address);
         this.idIterator = idIterator;
@@ -40,11 +36,9 @@ class HyruleServer {
         return server;
     }
 
-    /**
-     * Start the server and wait for unlock, then stop the server.
-     *
-     * @param serverDyingTimeout the timeout in milliseconds to wait for the server to die.
-     */
+    /// Start the server and wait for unlock, then stop the server.
+    ///
+    /// @param serverDyingTimeout the timeout in milliseconds to wait for the server to die.
     public void run(int serverDyingTimeout) throws InterruptedException {
         logger.info("Hyrule identifier production system (HIPS) is starting :");
         instance.start();
@@ -52,16 +46,12 @@ class HyruleServer {
         instance.stop(serverDyingTimeout);
     }
 
-    /**
-     * Return the next id.
-     */
+    /// Return the next id.
     public String newId() {
         return idIterator.next().representation();
     }
 
-    /**
-     * Unlock the server.
-     */
+    /// Unlock the server.
     public String unlock() {
         lock.countDown();
         return "Unlock thread";

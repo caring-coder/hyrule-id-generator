@@ -16,12 +16,10 @@ import java.util.Iterator;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-/**
- * This class is the entry point of the program.
- * It will parse the command line arguments, and start the server.
- * <p>
- * It will also configure the logging system.
- */
+/// This class is the entry point of the program.
+/// It will parse the command line arguments, and start the server.
+///
+/// It will also configure the logging system.
 public class Hyrule {
 
     private static final Logger logger = Logger.getLogger(Hyrule.class.getName());
@@ -32,17 +30,17 @@ public class Hyrule {
         throw new IllegalStateException("Class should not be instantiated");
     }
 
-    private static void readLoggingConfiguration(String name) throws IOException {
+    private static void readLoggingConfiguration(String name)
+            throws IOException {
         LogManager logManager = LogManager.getLogManager();
-        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(name);
+        InputStream is = ClassLoader.getSystemClassLoader()
+                                    .getResourceAsStream(name);
         logManager.readConfiguration(is);
     }
 
-    /**
-     * Start the program after parsing the command line arguments.
-     *
-     * @param args the command line arguments.
-     */
+    /// Start the program after parsing the command line arguments.
+    ///
+    /// @param args the command line arguments.
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(commandSpec());
         commandLine.setExecutionStrategy(Hyrule::run);
@@ -53,21 +51,21 @@ public class Hyrule {
         CommandSpec spec = CommandSpec.create();
         spec.mixinStandardHelpOptions(true);
         spec.addOption(OptionSpec.builder("-s", "--size")
-                .type(int.class)
-                .description("size of the identifiers")
-                .build());
+                                 .type(int.class)
+                                 .description("size of the identifiers")
+                                 .build());
         spec.addOption(OptionSpec.builder("--seed")
-                .type(String.class)
-                .description("starting seed for the generator")
-                .build());
+                                 .type(String.class)
+                                 .description("starting seed for the generator")
+                                 .build());
         spec.addOption(OptionSpec.builder("-p", "--port")
-                .type(int.class)
-                .description("listening port for http server")
-                .build());
+                                 .type(int.class)
+                                 .description("listening port for http server")
+                                 .build());
         spec.addOption(OptionSpec.builder("--timeout")
-                .type(int.class)
-                .description("waiting timeout for http server")
-                .build());
+                                 .type(int.class)
+                                 .description("waiting timeout for http server")
+                                 .build());
         return spec;
     }
 
@@ -86,9 +84,8 @@ public class Hyrule {
             int serverDyingTimeout = args.matchedOptionValue("--timeout", 10);
 
             SecureRandom secureRandom = getSecureRandom(prngStartingSeed);
-            Iterator<Id> idIterator = RandomIdIterator
-                    .generator(nbDigitsInIdRepresentation, secureRandom)
-                    .iterator();
+            Iterator<Id> idIterator = RandomIdIterator.generator(nbDigitsInIdRepresentation, secureRandom)
+                                                      .iterator();
 
             logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));
             InetSocketAddress address = new InetSocketAddress(listeningPort);
@@ -109,16 +106,18 @@ public class Hyrule {
         }
     }
 
-    /**
-     * Will create a SHA1PRNG random algorithm instance, and seed it with the given String bytes.
-     * Do not hesitate to give a really long input String.
-     * That algorithm has been chosen for its strength, and for the ability to be fully seeded, so allowing unit testing
-     *
-     * @param initialSeed will be used to seed the SecureRandom instance
-     * @return a seeded SecureRandom instance
-     * @throws NoSuchAlgorithmException in case there is no provider for SHA1PRNG algorithm
-     */
-    public static SecureRandom getSecureRandom(String initialSeed) throws NoSuchAlgorithmException {
+    /// Will create a SHA1PRNG random algorithm instance, and seed it with the given String bytes.
+    /// Do not hesitate to give a really long input String.
+    /// That algorithm has been chosen for its strength, and for the ability to be fully seeded, so allowing unit
+    /// testing
+    ///
+    /// @param initialSeed will be used to seed the SecureRandom instance
+    ///
+    /// @return a seeded SecureRandom instance
+    ///
+    /// @throws NoSuchAlgorithmException in case there is no provider for SHA1PRNG algorithm
+    public static SecureRandom getSecureRandom(String initialSeed)
+            throws NoSuchAlgorithmException {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         random.setSeed(initialSeed.getBytes(StandardCharsets.UTF_8));
         return random;
