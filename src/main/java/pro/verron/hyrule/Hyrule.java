@@ -97,10 +97,14 @@ public class Hyrule {
             HyruleServer hyruleServer = new HyruleServer(idIterator, address);
             hyruleServer.run(serverDyingTimeout);
             return SUCCESS_CODE;
-        } catch (Exception e) {
+        } catch (IOException | NoSuchAlgorithmException | InterruptedException e) {
             String className = Hyrule.class.getName();
-            String methodName = Thread.currentThread().getStackTrace()[0].getMethodName();
-            LogManager.getLogManager().getLogger(className).throwing(className, methodName, e);
+            var currentThread = Thread.currentThread();
+            String methodName = currentThread.getStackTrace()[0].getMethodName();
+            LogManager.getLogManager()
+                      .getLogger(className)
+                      .throwing(className, methodName, e);
+            if (e instanceof InterruptedException) currentThread.interrupt();
             return ERROR_CODE;
         }
     }
