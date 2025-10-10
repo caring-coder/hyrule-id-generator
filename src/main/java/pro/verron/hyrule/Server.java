@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.joining;
  */
 public class Server {
     private static final Logger logger = Logger.getLogger(Server.class.getName());
-    private final HttpServer server;
+    private final HttpServer instance;
     private final List<HttpContext> contexts = new ArrayList<>();
 
     /**
@@ -32,11 +32,11 @@ public class Server {
      * @throws IOException if the server cannot be created.
      */
     public Server(InetSocketAddress address) throws IOException {
-        server = createServerBoundToAddress(address);
+        instance = createServerBoundToAddress(address);
         createContext("catalog endpoints", "/", respond(200, () -> contexts.stream()
                 .map(httpContext -> "%s \t: %s".formatted(httpContext.getPath(), httpContext.getAttributes().getOrDefault("description", "no description")))
                 .collect(joining("\n"))));
-        logger.info("Created server at address %s".formatted(server.getAddress()));
+        logger.info("Created server at address %s".formatted(instance.getAddress()));
     }
 
     private static HttpServer createServerBoundToAddress(InetSocketAddress address) throws IOException {
@@ -82,7 +82,7 @@ public class Server {
      */
     public void createContext(String description, String path, HttpHandler handler) {
         logger.info("Created context at path %s".formatted(path));
-        HttpContext context = server.createContext(path, handler);
+        HttpContext context = instance.createContext(path, handler);
         context.getAttributes().put("description", description);
         contexts.add(context);
     }
@@ -92,7 +92,7 @@ public class Server {
      */
     public void start() {
         logger.info("Server starting...");
-        server.start();
+        instance.start();
         logger.info("Server started");
     }
 
@@ -103,7 +103,7 @@ public class Server {
      */
     public void stop(int timeout) {
         logger.info("Server stopping in %ds...".formatted(timeout));
-        server.stop(timeout);
+        instance.stop(timeout);
         logger.info("Server stopped");
     }
 }
