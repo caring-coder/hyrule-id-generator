@@ -30,14 +30,6 @@ public class Hyrule {
         throw new IllegalStateException("Class should not be instantiated");
     }
 
-    private static void readLoggingConfiguration(String name)
-            throws IOException {
-        LogManager logManager = LogManager.getLogManager();
-        InputStream is = ClassLoader.getSystemClassLoader()
-                                    .getResourceAsStream(name);
-        logManager.readConfiguration(is);
-    }
-
     /// Start the program after parsing the command line arguments.
     ///
     /// @param args the command line arguments.
@@ -105,6 +97,14 @@ public class Hyrule {
             if (e instanceof InterruptedException) currentThread.interrupt();
             return ERROR_CODE;
         }
+    }
+
+    private static void readLoggingConfiguration(String name)
+            throws IOException {
+        LogManager logManager = LogManager.getLogManager();
+        InputStream is = ClassLoader.getSystemClassLoader()
+                                    .getResourceAsStream(name);
+        logManager.readConfiguration(is);
     }
 
     /// Will create a SHA1PRNG random algorithm instance, and seed it with the given String bytes.
