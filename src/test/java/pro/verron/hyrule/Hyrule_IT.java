@@ -28,7 +28,7 @@ public class Hyrule_IT {
 
     @BeforeEach
     @Timeout(10)
-    public void before() throws InterruptedException {
+    void before() throws InterruptedException {
         thread = new Thread(() -> Hyrule.main(new String[0]));
         thread.start();
         Thread.sleep(100);
@@ -36,9 +36,9 @@ public class Hyrule_IT {
 
     @AfterEach
     @Timeout(20)
-    public void after() throws InterruptedException, IOException {
+    void after() throws InterruptedException, IOException {
         HttpResponse<String> response = sendGetRequest("http://localhost:8888/kill");
-        assertEquals(response.body(), "Unlock thread");
+        assertEquals("Unlock thread", response.body());
         //This join call lets the test fails when it's dying in time longer than the timeout in annotation
         thread.join(10_000);
     }
@@ -48,6 +48,6 @@ public class Hyrule_IT {
     void should_be_able_to_get_an_id() throws IOException, InterruptedException {
         HttpResponse<String> response = sendGetRequest("http://localhost:8888/hyrule/new-id");
         String firstId = "783294182";
-        assertEquals(response.body(), firstId);
+        assertEquals(firstId, response.body());
     }
 }

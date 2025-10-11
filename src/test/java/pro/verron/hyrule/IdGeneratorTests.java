@@ -1,16 +1,13 @@
 package pro.verron.hyrule;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 import static java.util.Comparator.reverseOrder;
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -18,70 +15,104 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class IdGeneratorTests {
     public static final String SEED = "HyruleDefaultIdStreamSeed";
-    public static final int NB_CHAR = 9;
-    private Generator<Id> generator;
+    private static final SecureRandom secureRandom;
 
-    @BeforeEach
-    public void before() throws NoSuchAlgorithmException {
-        generator = newGenerator();
-    }
-
-    private Generator<Id> newGenerator() throws NoSuchAlgorithmException {
-        return RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), NB_CHAR, 10);
+    static {
+        try {
+            secureRandom = Hyrule.getSecureRandom(SEED);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void should_be_able_to_create_an_hyrule_id_producer() {
-        assertNotNull(generator, "Failed to create an HyruleId producer");
+        var maxValue = Math.powExact(10, 9);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        assertNotNull(iterator, "Failed to create an HyruleId producer");
     }
 
     @Test
     void should_be_9_characters_long_only_be_composed_of_digits() {
-        Id id = generator.iterator().next();
-        assertTrue(id.representation().matches("[0-9]{9}"));
+        var maxValue = Math.powExact(10, 9);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        Id id = new Id(9, iterator.next());
+        assertTrue(id.representation()
+                     .matches("[0-9]{9}"));
     }
 
     @Test
     void shunt_have_zero_or_negative_size_characters() {
-        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), 0, 10));
-        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), -2, 10));
+        assertThrows(AssertionError.class, () -> new Id(0, 12345));
+        assertThrows(AssertionError.class, () ->new Id(-1, 12345));
     }
 
     @Test
-    void should_have_no_duplicates() throws NoSuchAlgorithmException {
-        Generator<Id> smallGenerator = RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), 2, 10);
-        List<Id> list = smallGenerator
-                .stream()
-                .limit(99)
-                .toList();
-        Set<Id> set = new HashSet<>(list);
+    void should_have_no_duplicates() {
+        var maxValue = Math.powExact(10, 2);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        List<Integer> list = StreamSupport.stream(newSpliterator(iterator, 2), false)
+                                          .limit(99)
+                                          .toList();
+        Set<Integer> set = new HashSet<>(list);
         assertEquals(set.size(), list.size(), "the id stream contained duplicates");
+    }
+
+    private Spliterator<Integer> newSpliterator(Iterator<Integer> iterator, int nbChar) {
+        return Spliterators.spliterator(iterator, Math.powExact(10, nbChar), Spliterator.DISTINCT);
     }
 
     @Test
     void should_be_able_to_generate_a_large_number_of_ids() {
-        Optional<Id> id = generator.stream().skip(10_000).findFirst();
+        var maxValue = Math.powExact(10, 9);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        var id = StreamSupport.stream(newSpliterator(iterator, 9), false)
+                                            .skip(10_000)
+                                            .findFirst();
         assertTrue(id.isPresent(), "Not found that much id");
     }
 
     @Test
     void should_not_be_ordered_ascending() {
-        List<Id> ids = generator.stream().limit(10_000).collect(toList());
-        List<Id> sortedIds = ids.stream().sorted().collect(toList());
+        var maxValue = Math.powExact(10, 9);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        List<Integer> ids = StreamSupport.stream(newSpliterator(iterator, 9), false)
+                                         .limit(10_000)
+                                         .toList();
+        List<Integer> sortedIds = ids.stream()
+                                     .sorted()
+                                     .toList();
         assertNotEquals(sortedIds, ids);
     }
 
     @Test
     void should_not_be_ordered_descending() {
-        List<Id> ids = generator.stream().limit(10_000).collect(toList());
-        List<Id> sortedIds = ids.stream().sorted(reverseOrder()).collect(toList());
+        var maxValue = Math.powExact(10, 9);
+        var iterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+        List<Integer> ids = StreamSupport.stream(newSpliterator(iterator, 9), false)
+                                         .limit(10_000)
+                                         .toList();
+        List<Integer> sortedIds = ids.stream()
+                                     .sorted(reverseOrder())
+                                     .toList();
         assertNotEquals(sortedIds, ids);
     }
 
     @Test
-    void should_reliably_get_specific_ids() throws NoSuchAlgorithmException {
-        Id firstStream500thId = generator.stream().skip(500).findFirst().orElseThrow();
-        Id secondStream500thId = newGenerator().stream().skip(500).findFirst().orElseThrow();
+    void should_reliably_get_specific_ids()
+            throws NoSuchAlgorithmException {
+        var maxValue = Math.powExact(10, 9);
+        var iterator1 = SmartDistinctRandomIterator.iterator(Hyrule.getSecureRandom(SEED), maxValue);
+        Integer firstStream500thId = StreamSupport.stream(newSpliterator(iterator1, 9), false)
+                                                  .skip(500)
+                                                  .findFirst()
+                                                  .orElseThrow();
+
+        var iterator2 = SmartDistinctRandomIterator.iterator(Hyrule.getSecureRandom(SEED), maxValue);
+        Integer secondStream500thId = StreamSupport.stream(newSpliterator(iterator2, 9), false)
+                                                   .skip(500)
+                                                   .findFirst()
+                                                   .orElseThrow();
         assertEquals(firstStream500thId, secondStream500thId);
     }
 

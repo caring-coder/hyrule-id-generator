@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
-import java.util.Iterator;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -70,19 +69,18 @@ public class Hyrule {
             readLoggingConfiguration("logging.properties");
             // TODO: Make all those parameters as program input (args or properties file)
             // TODO: Maybe could allow to start as a command line program as an option
-            int nbDigitsInIdRepresentation = args.matchedOptionValue("--size", 9);
+            int size = args.matchedOptionValue("--size", 9);
             String prngStartingSeed = args.matchedOptionValue("--seed", "Hyrule");
             int listeningPort = args.matchedOptionValue("--port", 8888);
             int serverDyingTimeout = args.matchedOptionValue("--timeout", 10);
 
             SecureRandom secureRandom = getSecureRandom(prngStartingSeed);
-            var numericalBase = 10;
-            Iterator<Id> idIterator = RandomIdIterator.generator(secureRandom, nbDigitsInIdRepresentation, numericalBase)
-                                                      .iterator();
+            var maxValue = Math.powExact(10, size) - 1;
+            var intIterator = SmartDistinctRandomIterator.iterator(secureRandom, maxValue);
+            var idIterator = new IdIterator(intIterator, size);
 
             logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));
             InetSocketAddress address = new InetSocketAddress(listeningPort);
-
 
             HyruleServer hyruleServer = new HyruleServer(idIterator, address);
             hyruleServer.run(serverDyingTimeout);

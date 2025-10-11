@@ -117,7 +117,7 @@ public class GeneratorTests {
 - `pro.verron.hyrule.Hyrule`: Main entry point class
 - `pro.verron.hyrule.Id`: Immutable class representing an ID
 - `pro.verron.hyrule.Generator`: Wrapper for iterators that provides stream conversion
-- `pro.verron.hyrule.RandomIdIterator`: Iterator that generates random IDs
+- `pro.verron.hyrule.SmartDistinctRandomIterator`: Iterator that generates random distinct integers
 - `pro.verron.hyrule.HyruleServer`: HTTP server that serves generated IDs
 - `pro.verron.hyrule.Server`: Interface for server implementations
 
