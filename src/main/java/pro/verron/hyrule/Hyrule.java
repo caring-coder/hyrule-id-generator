@@ -84,7 +84,8 @@ public class Hyrule {
             int serverDyingTimeout = args.matchedOptionValue("--timeout", 10);
 
             SecureRandom secureRandom = getSecureRandom(prngStartingSeed);
-            Iterator<Id> idIterator = RandomIdIterator.generator(nbDigitsInIdRepresentation, secureRandom)
+            var numericalBase = 10;
+            Iterator<Id> idIterator = RandomIdIterator.generator(secureRandom, nbDigitsInIdRepresentation, numericalBase)
                                                       .iterator();
 
             logger.info(MessageFormat.format("HIPS will listen on port {0}", listeningPort));

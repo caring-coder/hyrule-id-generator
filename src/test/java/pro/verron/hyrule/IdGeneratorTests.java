@@ -27,7 +27,7 @@ class IdGeneratorTests {
     }
 
     private Generator<Id> newGenerator() throws NoSuchAlgorithmException {
-        return RandomIdIterator.generator(NB_CHAR, Hyrule.getSecureRandom(SEED));
+        return RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), NB_CHAR, 10);
     }
 
     @Test
@@ -43,13 +43,13 @@ class IdGeneratorTests {
 
     @Test
     void shunt_have_zero_or_negative_size_characters() {
-        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(0, Hyrule.getSecureRandom(SEED)));
-        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(-2, Hyrule.getSecureRandom(SEED)));
+        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), 0, 10));
+        assertThrows(AssertionError.class, () -> RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), -2, 10));
     }
 
     @Test
     void should_have_no_duplicates() throws NoSuchAlgorithmException {
-        Generator<Id> smallGenerator = RandomIdIterator.generator(2, Hyrule.getSecureRandom(SEED));
+        Generator<Id> smallGenerator = RandomIdIterator.generator(Hyrule.getSecureRandom(SEED), 2, 10);
         List<Id> list = smallGenerator
                 .stream()
                 .limit(99)

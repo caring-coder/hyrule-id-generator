@@ -8,41 +8,38 @@ import java.util.Random;
 /// It will generate random ids of the given size, and will not generate twice the same id.
 public class RandomIdIterator
         implements Iterator<Id> {
-    private final int nbChar;
+    private final int size;
     private final Random random;
     private final int upperBound;
 
     /// Return a random id generator, where the ids have as many characters as requested.
     ///
-    /// @param nbChar the number of characters of the ids to generate
     /// @param random the random generator to use
+    /// @param size   the size of the ids to generate
+    /// @param base   the number of signs in the numeric base
     ///
     /// @throws AssertionError if the number of characters is not positive
-    public RandomIdIterator(int nbChar, Random random) {
-        if (nbChar < 1)
+    public RandomIdIterator(Random random, int size, int base) {
+        if (size < 1)
             throw new AssertionError("Only positive upper bound is being considered");
-        this.nbChar = nbChar;
+        this.size = size;
         this.random = random;
-        this.upperBound = computeHighestPossibleValue(nbChar);
+        this.upperBound = computeHighestPossibleValue(size, base);
     }
 
-    private static int computeHighestPossibleValue(int nbChar) {
-        int top = 0;
-        for (int i = 0; i < nbChar; i++) {
-            top = top * 10 + 9;
-        }
-        return top;
+    private static int computeHighestPossibleValue(int size, int base) {
+        return base * size - 1;
     }
 
     /// This method will generate a random id generator.
     /// It will generate random ids of the given size, and will not generate twice the same id.
     ///
-    /// @param nbChar the size of the ids to generate
     /// @param random the random generator to use
+    /// @param size   the size of the ids to generate
     ///
     /// @return a generator of random ids
-    public static Generator<Id> generator(int nbChar, SecureRandom random) {
-        Iterator<Id> randomIdIterator = new RandomIdIterator(nbChar, random);
+    public static Generator<Id> generator(SecureRandom random, int size, int base) {
+        Iterator<Id> randomIdIterator = new RandomIdIterator(random, size, base);
         Iterator<Id> distinctIdIterator = new Generator<>(randomIdIterator).stream()
                                                                            .distinct()
                                                                            .iterator();
@@ -64,6 +61,6 @@ public class RandomIdIterator
     public Id next() {
         // TODO: method can be improved by using nextBytes(), bytes operations, and precomputing values
         int value = random.nextInt(upperBound);
-        return new Id(nbChar, value);
+        return new Id(size, value);
     }
 }
